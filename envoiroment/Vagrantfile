@@ -16,8 +16,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Configurazione del nodo:
     # - Java SDK 8
     # - Gradle
-    # - Docker [Da fare]
-    # - Docker Compose [Da fare]
+    # - Docker 
+    # - Docker Compose 
 
     config.vm.define "node1" do |node| 
         node.vm.hostname = "node1"
@@ -44,6 +44,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # Installazione Docker
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-docker.sh"
+
+        # Installazione Docker Compose
+        node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-docker-compose.sh"
 
         node.vm.provision :shell, 
             inline: "echo  'configurazione nodo workstation completata'"
