@@ -42,6 +42,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # Installazione Gradle
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-gradle.sh"
 
+        # Installazione Docker
+        node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-docker.sh"
+
         node.vm.provision :shell, 
             inline: "echo  'configurazione nodo workstation completata'"
     end
