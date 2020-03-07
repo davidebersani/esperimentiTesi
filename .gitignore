@@ -48,23 +48,4 @@ envoiroment/.vagrant/*
 # Ignore all local history of files
 .history
 
-### Gradle ###
-sources/*/.gradle
-sources/*/build/
-
-# Ignore Gradle GUI config
-sources/*/gradle-app.setting
-
-# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
-!gradle-wrapper.jar
-
-# Cache of project
-.gradletasknamecache
-
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-
-### Gradle Patch ###
-**/build/
-
 # End of https://www.gitignore.io/api/java,vagrant,visualstudiocode
