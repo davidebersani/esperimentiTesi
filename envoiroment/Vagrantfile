@@ -1,0 +1,48 @@
+# Vagrant file per un nodo sul quale fare esperimenti di monitoraggio e tracing di eccezioni in ambiente a microservizi
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    # Ubuntu 18.04 Virtualbox - credenziali vagrant/vagrant
+    config.vm.box = "bento/ubuntu-18.04"
+    
+
+    # Condivido la directory dei sorgenti con la vm guest
+    config.vm.synced_folder "../sources/", "/home/vagrant/sources", :mount_options => ["dmode=777", "fmode=777"]
+    
+    # Condivido la directory con script utili per il Provisioning
+    config.vm.synced_folder "../provisioning/", "/home/vagrant/provisioning", :mount_options => ["dmode=777", "fmode=777"]
+
+    # Configurazione del nodo:
+    # - Java SDK 8
+    # - Gradle
+    # - Docker [Da fare]
+    # - Docker Compose [Da fare]
+
+    config.vm.define "node1" do |node| 
+        node.vm.hostname = "node1"
+        # Nodo su rete privata con ip statico
+        node.vm.network "private_network", ip: "10.11.1.111", virtualbox__intnet: true
+
+        # Impostazioni Virtualbox
+        node.vm.provider "virtualbox" do |v| 
+            v.memory = 4096 
+            v.cpus = 4
+        end 
+
+        node.vm.network "forwarded_port", guest: 22, host: 2222, id: 'ssh', auto_correct: true 
+        node.ssh.forward_agent = true
+        node.vm.network "forwarded_port", guest: 8080, host: 8080, id: 'http', auto_correct: true
+        # node.vm.network "forwarded_port", guest: 9092, host: 9092, id: 'kafka', auto_correct: true
+
+        # Provisioning
+        node.vm.provision :shell, :inline => 'apt update'
+        # Installazione Java
+        node.vm.provision :shell, :inline => 'apt install -y openjdk-8-jdk'
+        # Installazione Gradle
+        node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-gradle.sh"
+
+        node.vm.provision :shell, 
+            inline: "echo  'configurazione nodo workstation completata'"
+    end
+end
