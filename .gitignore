@@ -49,3 +49,4 @@ envoiroment/.vagrant/*
 .history
 
 # End of https://www.gitignore.io/api/java,vagrant,visualstudiocode
+sources/printer-service/bin/main/application.yml

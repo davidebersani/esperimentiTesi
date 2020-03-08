@@ -1,0 +1,8 @@
+# application.yml 
+--- 
+spring: 
+  application: 
+    name: printer
+
+server: 
+  port: 8080
