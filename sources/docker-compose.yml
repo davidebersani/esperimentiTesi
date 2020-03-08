@@ -1,0 +1,13 @@
+version: '2'
+services:
+  printer:
+    build: 
+      context: ./printer-service
+    container_name: printer
+    ports:
+    - "8080:8080"
+
+
+
+
+
