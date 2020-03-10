@@ -2,12 +2,12 @@
 --- 
 spring: 
   application: 
-    name: printer
-
+    name: zuul
+    
 eureka: 
   client: 
     serviceUrl: 
-#      defaultZone: http://localhost:8761/eureka/ check this url
+#      defaultZone: http://localhost:8761/eureka/
       defaultZone: http://eureka:8761/eureka/
 # leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
 # just here to provide quicker updates to Eureka for demos
@@ -15,6 +15,6 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     metadataMap: 
       instanceId: ${spring.application.name}:${random.value}
-# Porta casuale
-server: 
-  port: ${PORT:${SERVER_PORT:0}}
+
+server:
+  port: 8080
