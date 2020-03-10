@@ -1,0 +1,31 @@
+version: '3'
+services:
+  # Eureka
+  eureka:
+    build:
+      context: ./eureka-server
+    container_name: eureka
+  # A
+  a-service:
+    build: 
+      context: ./printer-service
+    container_name: a-service
+    environment:
+    - spring.application.name=A
+    depends_on:
+      - "eureka"
+
+  # Zuul
+  zuul:
+    build:
+      context: ./zuul-gateway
+    container_name: zuul
+    ports:
+    - "8080:8080"
+    depends_on:
+      - "eureka"
+
+
+
+
+

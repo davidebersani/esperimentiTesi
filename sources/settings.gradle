@@ -1,0 +1,9 @@
+rootProject.name = 'esperimenti-tesi'
+
+include 'printer-service'
+include 'zuul-gateway'
+include 'eureka-server'
+
+project(':printer-service').name = 'printer'
+project(':zuul-gateway').name = 'zuul'
+project(':eureka-server').name = 'eureka'
