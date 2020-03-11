@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class PrinterService {
-	private final Logger logger = Logger.getLogger(PrinterService.class.toString()); 
+public class PrinterController {
+	private final Logger logger = Logger.getLogger(PrinterController.class.toString()); 
 	
 	@Value("${spring.application.name}")
 	private String appName;
