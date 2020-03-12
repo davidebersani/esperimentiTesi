@@ -1,6 +1,6 @@
 # Esperimenti tesi magistrale
 
-## Autore: Davide Bersani
+## Autore: [Davide Bersani](https://github.com/bersani96) e [Marco Berbeglia](https://github.com/marcoberb)
 
 Repository che contiene l'ambiente e gli strumenti per sperimentare con 
 il monitoraggio e il tracing di eccezioni in ambiente a microservizi.
@@ -12,8 +12,6 @@ il monitoraggio e il tracing di eccezioni in ambiente a microservizi.
 - Gradle 5.4.1
 
 ## Struttura
-- envoiroment: contiene il file Vagrant per la creazione dell'ambiente.
+- environment: contiene il file Vagrant per la creazione dell'ambiente.
 - provisioning: contiene gli script necessari al provisioning dell'ambiente.
 - sources: contiene i sorgenti.
-
-
