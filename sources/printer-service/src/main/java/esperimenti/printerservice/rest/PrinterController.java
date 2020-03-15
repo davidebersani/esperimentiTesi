@@ -1,4 +1,4 @@
-package davide.bersani.printerservice.rest;
+package esperimenti.printerservice.rest;
 
 import java.util.logging.Logger;
 
