@@ -156,3 +156,7 @@ fabric.properties
 .idea/**/markdown-navigator/
 
 # End of https://www.gitignore.io/api/java,vagrant,visualstudiocode
+sources/gradlew
+sources/gradlew.bat
+sources/gradle/wrapper/gradle-wrapper.jar
+sources/gradle/wrapper/gradle-wrapper.properties
