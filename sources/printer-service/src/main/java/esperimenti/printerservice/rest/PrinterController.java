@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PrinterController {
-	private final Logger logger = Logger.getLogger(PrinterController.class.toString()); 
 	
 	@Value("${spring.application.name}")
 	private String appName;
