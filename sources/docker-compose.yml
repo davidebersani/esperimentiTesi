@@ -7,11 +7,20 @@ services:
     container_name: eureka
   # A
   a-service:
-    build: 
+    build:
       context: ./printer-service
     container_name: a-service
     environment:
-    - spring.application.name=A
+      - spring.application.name=A
+    depends_on:
+      - "eureka"
+  # B
+  b-service:
+    build:
+      context: ./printer-service
+    container_name: b-service
+    environment:
+      - spring.application.name=B
     depends_on:
       - "eureka"
 
