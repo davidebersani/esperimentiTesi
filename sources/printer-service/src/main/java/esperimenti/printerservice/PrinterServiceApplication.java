@@ -1,4 +1,4 @@
-package davide.bersani.printerservice;
+package esperimenti.printerservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
