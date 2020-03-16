@@ -29,7 +29,7 @@ hs_err_pid*
 
 ### Vagrant ###
 # General
-environment/.vagrant/*
+environment/.vagrant/
 
 # Log files (if you are creating logs in debug mode, uncomment this)
 # *.log
