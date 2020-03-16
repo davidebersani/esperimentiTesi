@@ -49,7 +49,7 @@ environment/.vagrant/*
 .history
 
 ### Gradle ###
-.gradle
+sources/.gradle
 build/
 
 # Ignore Gradle GUI config
