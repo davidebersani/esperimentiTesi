@@ -18,3 +18,11 @@ eureka:
 
 server:
   port: 8080
+
+ribbon:
+  ConnectTimeout:  10000
+  ReadTimeout:  10000
+  eager-load:
+    enabled: true
+  eureka:
+    enabled: true
