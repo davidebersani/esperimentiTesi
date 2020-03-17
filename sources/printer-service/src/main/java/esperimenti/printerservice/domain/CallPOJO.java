@@ -4,10 +4,17 @@ import java.util.List;
 
 public class CallPOJO {
 
-    enum IPCType {REST,MESSAGE};
+    enum IPCType {
+        REST,
+        MESSAGE
+    };
+
     private String service_to_call;
+
     private IPCType ipc_type;
+
     private boolean going_to_fail;
+
     private List<CallPOJO> next_calls;
 
     public CallPOJO(String service_to_call, IPCType ipc_type, boolean going_to_fail, List<CallPOJO> next_calls) {

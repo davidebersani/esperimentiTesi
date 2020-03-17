@@ -1,10 +1,12 @@
 version: '3'
 services:
+
   # Eureka
   eureka:
     build:
       context: ./eureka-server
     container_name: eureka
+
   # A
   a-service:
     build:
@@ -14,6 +16,7 @@ services:
       - spring.application.name=A
     depends_on:
       - "eureka"
+
   # B
   b-service:
     build:
@@ -33,8 +36,3 @@ services:
     - "8080:8080"
     depends_on:
       - "eureka"
-
-
-
-
-
