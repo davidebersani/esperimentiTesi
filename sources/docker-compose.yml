@@ -7,6 +7,16 @@ services:
       context: ./eureka-server
     container_name: eureka
 
+  # Client
+  client-service:
+    build:
+      context: ./printer-service
+    container_name: client-service
+    environment:
+      - spring.application.name=CLIENT
+    depends_on:
+      - "eureka"
+
   # A
   a-service:
     build:

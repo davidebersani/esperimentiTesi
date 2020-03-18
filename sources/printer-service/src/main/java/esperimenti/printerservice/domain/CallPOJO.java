@@ -4,11 +4,6 @@ import java.util.List;
 
 public class CallPOJO {
 
-    enum IPCType {
-        REST,
-        MESSAGE
-    };
-
     private String service_to_call;
 
     private IPCType ipc_type;
