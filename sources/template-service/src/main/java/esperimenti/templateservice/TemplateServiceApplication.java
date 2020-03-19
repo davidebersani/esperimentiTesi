@@ -1,4 +1,4 @@
-package esperimenti.printerservice;
+package esperimenti.templateservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,10 +10,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 @EnableHystrix
-public class PrinterServiceApplication {
+public class TemplateServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PrinterServiceApplication.class, args);
+		SpringApplication.run(TemplateServiceApplication.class, args);
 	}
 
 }

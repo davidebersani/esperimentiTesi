@@ -1,4 +1,4 @@
-package esperimenti.printerservice.domain;
+package esperimenti.templateservice.domain;
 
 public enum IPCType {
     REST,

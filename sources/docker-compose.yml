@@ -10,7 +10,7 @@ services:
   # Client
   client-service:
     build:
-      context: ./printer-service
+      context: ./template-service
     container_name: client-service
     environment:
       - spring.application.name=CLIENT
@@ -20,7 +20,7 @@ services:
   # A
   a-service:
     build:
-      context: ./printer-service
+      context: ./template-service
     container_name: a-service
     environment:
       - spring.application.name=A
@@ -30,7 +30,7 @@ services:
   # B
   b-service:
     build:
-      context: ./printer-service
+      context: ./template-service
     container_name: b-service
     environment:
       - spring.application.name=B

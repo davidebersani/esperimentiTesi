@@ -1,4 +1,4 @@
-package esperimenti.printerservice.domain;
+package esperimenti.templateservice.domain;
 
 import java.util.List;
 

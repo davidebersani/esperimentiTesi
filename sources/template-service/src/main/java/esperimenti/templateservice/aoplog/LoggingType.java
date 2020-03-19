@@ -1,4 +1,4 @@
-package esperimenti.printerservice.aoplog;
+package esperimenti.templateservice.aoplog;
 
 public enum LoggingType {
     REQUEST, FAIL, SUCCESS

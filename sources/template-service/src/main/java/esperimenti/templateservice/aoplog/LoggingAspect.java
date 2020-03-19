@@ -1,4 +1,4 @@
-package esperimenti.printerservice.aoplog;
+package esperimenti.templateservice.aoplog;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -21,7 +21,7 @@ public class LoggingAspect {
     }
 
     // Pointcut che rappresenta i metodi dei controller Rest
-    @Pointcut("execution(* esperimenti.printerservice.rest.*.*(..))")
+    @Pointcut("execution(* esperimenti.templateservice.rest.*.*(..))")
     public void restCalls() {}
 
     // Eseguito prima dell'esecuzione del metodo
