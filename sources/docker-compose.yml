@@ -1,23 +1,36 @@
 version: '3'
 services:
+
   # Eureka
   eureka:
     build:
       context: ./eureka-server
     container_name: eureka
+
+  # Client
+  client-service:
+    build:
+      context: ./template-service
+    container_name: client-service
+    environment:
+      - spring.application.name=CLIENT
+    depends_on:
+      - "eureka"
+
   # A
   a-service:
     build:
-      context: ./printer-service
+      context: ./template-service
     container_name: a-service
     environment:
       - spring.application.name=A
     depends_on:
       - "eureka"
+
   # B
   b-service:
     build:
-      context: ./printer-service
+      context: ./template-service
     container_name: b-service
     environment:
       - spring.application.name=B
@@ -33,8 +46,3 @@ services:
     - "8080:8080"
     depends_on:
       - "eureka"
-
-
-
-
-
