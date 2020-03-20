@@ -16,6 +16,7 @@ services:
       - spring.application.name=CLIENT
     depends_on:
       - "eureka"
+      - "kafka"
 
   # A
   a-service:
@@ -26,6 +27,7 @@ services:
       - spring.application.name=A
     depends_on:
       - "eureka"
+      - "kafka"
 
   # B
   b-service:
@@ -36,6 +38,7 @@ services:
       - spring.application.name=B
     depends_on:
       - "eureka"
+      - "kafka"
 
   # Zuul
   zuul:
@@ -46,3 +49,22 @@ services:
     - "8080:8080"
     depends_on:
       - "eureka"
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:latest
+    container_name: kafka
+    depends_on:
+      - "zookeeper"
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,client:4:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

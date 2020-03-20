@@ -1,4 +1,4 @@
-package esperimenti.templateservice.rest;
+package esperimenti.templateservice.restAdapters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

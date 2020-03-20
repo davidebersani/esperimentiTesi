@@ -161,3 +161,5 @@ sources/gradlew
 sources/gradlew.bat
 sources/gradle/wrapper/gradle-wrapper.jar
 sources/gradle/wrapper/gradle-wrapper.properties
+sources/eureka-server/.gradle/
+sources/eureka-server/.settings/

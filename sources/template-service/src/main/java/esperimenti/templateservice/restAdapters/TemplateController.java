@@ -1,4 +1,4 @@
-package esperimenti.templateservice.rest;
+package esperimenti.templateservice.restAdapters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import esperimenti.templateservice.domain.CallPOJO;
@@ -16,6 +16,7 @@ public class TemplateController {
 
 	@Autowired
 	private TemplateService templateService;
+
 
 	@PostMapping(value = "/prosegui", consumes = "application/json")
 	public void prosegui(@RequestBody List<CallPOJO> calls) throws JsonProcessingException{
