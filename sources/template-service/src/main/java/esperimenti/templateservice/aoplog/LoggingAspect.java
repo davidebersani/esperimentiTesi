@@ -21,7 +21,7 @@ public class LoggingAspect {
     }
 
     // Pointcut che rappresenta i metodi dei controller Rest
-    @Pointcut("execution(* esperimenti.templateservice.rest.*.*(..))")
+    @Pointcut("execution(* esperimenti.templateservice.*Adapters.*.*(..))")
     public void restCalls() {}
 
     // Eseguito prima dell'esecuzione del metodo

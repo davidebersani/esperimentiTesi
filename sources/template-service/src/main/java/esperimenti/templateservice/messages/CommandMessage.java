@@ -5,7 +5,9 @@ import esperimenti.templateservice.domain.CallPOJO;
 import java.util.List;
 
 public class CommandMessage {
+
     private boolean goingToFail;
+
     private List<CallPOJO> calls;
 
     public CommandMessage(boolean goingToFail, List<CallPOJO> calls) {
@@ -27,5 +29,13 @@ public class CommandMessage {
 
     public void setCalls(List<CallPOJO> calls) {
         this.calls = calls;
+    }
+
+    @Override
+    public String toString() {
+        return "CommandMessage{" +
+                "goingToFail=" + goingToFail +
+                ", calls=" + calls +
+                '}';
     }
 }

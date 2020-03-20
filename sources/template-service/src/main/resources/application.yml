@@ -4,20 +4,22 @@ spring:
   application: 
     name: template
   kafka:
-    bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    #marco#bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    bootstrap-servers: 10.11.1.111:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       group-id: ${template.kafka.grouid}
-      auto-offest-reset: latest
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring:
           json:
             trusted:
-              packages: *
+              packages: "*"
+
 
 eureka:
   client: 

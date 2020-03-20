@@ -32,15 +32,20 @@ public class TemplateService {
         for(CallPOJO call:calls) {
 
             if (call.getIpc_type() == IPCType.MESSAGE) {
-                //log.info("Message IPC not yet implemented");
+
                 CommandMessage cm = new CommandMessage(call.isGoing_to_fail(), call.getNext_calls());
                 publisher.publish(cm, call.getService_to_call());
+
             }else if (call.getIpc_type() == IPCType.REST) {
-                if (call.isGoing_to_fail()){
+
+                if (call.isGoing_to_fail()) {
+
                     templateServicePort.proseguiVersoServizoCheFallisce(call);
-                }else
-                {
+
+                }else {
+
                     templateServicePort.proseguiVersoServizio(call);
+
                 }
             }
 
