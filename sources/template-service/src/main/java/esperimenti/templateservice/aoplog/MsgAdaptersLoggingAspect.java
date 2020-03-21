@@ -7,39 +7,37 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
-
 @Component
 @Aspect
 @Slf4j
-public class LoggingAspect {
+public class MsgAdaptersLoggingAspect {
 
-
-    private static void writeLog(JoinPoint joinPoint, LoggingType loggingType) {
+    private static void logWithType(JoinPoint joinPoint, LoggingType loggingType) {
+        String context = "MSG";
         final String args = Arrays.toString(joinPoint.getArgs());
         final String methodName = joinPoint.getSignature().toShortString().replace("(..)", "()");
-        log.info("{} [method:{}, args:{}]", loggingType, methodName, args);
+        log.info("{} context:{} [method:{}, args:{}]", loggingType, context, methodName, args);
     }
 
-    // Pointcut che rappresenta i metodi dei controller Rest
-    @Pointcut("execution(* esperimenti.templateservice.*Adapters.*.*(..))")
-    public void restCalls() {}
+    // Pointcut che rappresenta i metodi degli adapters per messaging
+    @Pointcut("execution(* esperimenti.templateservice.msgAdapters.*.*(..))")
+    public void msgCalls() {}
 
     // Eseguito prima dell'esecuzione del metodo
-    @Before("restCalls()")
+    @Before("msgCalls()")
     public void logBeforeExecuteMethod(JoinPoint joinPoint) {
-        writeLog(joinPoint, LoggingType.REQUEST);
+        logWithType(joinPoint, LoggingType.REQUEST);
     }
 
     // Eseguito quando il metodo è terminato (con successo)
-    @AfterReturning(value = "restCalls()")
+    @AfterReturning(value = "msgCalls()")
     public void logSuccessMethod(JoinPoint joinPoint) {
-        writeLog(joinPoint,LoggingType.SUCCESS);
+        logWithType(joinPoint,LoggingType.SUCCESS);
     }
 
     // Eseguito se è stata sollevata un'eccezione
-    @AfterThrowing("restCalls()")
+    @AfterThrowing("msgCalls()")
     public void logErrorApplication(JoinPoint joinPoint) {
-        writeLog(joinPoint,LoggingType.FAIL);
+        logWithType(joinPoint,LoggingType.FAIL);
     }
-
 }

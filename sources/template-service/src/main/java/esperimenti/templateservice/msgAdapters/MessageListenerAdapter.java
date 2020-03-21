@@ -28,7 +28,7 @@ public class MessageListenerAdapter {
 
         CommandMessage cm = record.value();
 
-        log.info("record ricevuto: " + record.toString());
+        //log.info("record ricevuto: " + record.toString());
         log.info("messaggio ricevuto: " + cm);
 
         if(cm.isGoingToFail()) {

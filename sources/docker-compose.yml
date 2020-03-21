@@ -66,8 +66,7 @@ services:
     ports:
       - "9092:9092"
     environment:
-      #marco#KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
-      KAFKA_ADVERTISED_HOST_NAME: 10.11.1.111
+      KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,client:4:1"
     volumes:
