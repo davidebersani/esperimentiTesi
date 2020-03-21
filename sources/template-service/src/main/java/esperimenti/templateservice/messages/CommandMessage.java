@@ -10,6 +10,10 @@ public class CommandMessage {
 
     private List<CallPOJO> calls;
 
+    public CommandMessage() {
+
+    }
+
     public CommandMessage(boolean goingToFail, List<CallPOJO> calls) {
         this.goingToFail = goingToFail;
         this.calls = calls;

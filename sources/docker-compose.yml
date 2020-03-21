@@ -13,7 +13,7 @@ services:
       context: ./template-service
     container_name: client-service
     environment:
-      - spring.application.name=CLIENT
+      - spring.application.name=client
     depends_on:
       - "eureka"
       - "kafka"
@@ -24,7 +24,7 @@ services:
       context: ./template-service
     container_name: a-service
     environment:
-      - spring.application.name=A
+      - spring.application.name=a
     depends_on:
       - "eureka"
       - "kafka"
@@ -35,7 +35,7 @@ services:
       context: ./template-service
     container_name: b-service
     environment:
-      - spring.application.name=B
+      - spring.application.name=b
     depends_on:
       - "eureka"
       - "kafka"
