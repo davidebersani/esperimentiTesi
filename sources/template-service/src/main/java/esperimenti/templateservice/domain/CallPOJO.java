@@ -12,6 +12,8 @@ public class CallPOJO {
 
     private List<CallPOJO> next_calls;
 
+    public CallPOJO(){}
+
     public CallPOJO(String service_to_call, IPCType ipc_type, boolean going_to_fail, List<CallPOJO> next_calls) {
         this.service_to_call = service_to_call;
         this.ipc_type = ipc_type;

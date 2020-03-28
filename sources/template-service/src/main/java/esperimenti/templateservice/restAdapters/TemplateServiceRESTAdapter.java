@@ -1,4 +1,4 @@
-package esperimenti.templateservice.rest;
+package esperimenti.templateservice.restAdapters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -59,7 +59,7 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
                 log.info("Risposta chiamata: " + responseEntityStr);
             } catch (HttpServerErrorException e) {
-                log.info("\nresponsebody: " + e.getResponseBodyAsString());
+                //log.info("\nresponsebody: " + e.getResponseBodyAsString());
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
             }
 

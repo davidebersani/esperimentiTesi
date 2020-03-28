@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import esperimenti.templateservice.domain.CallPOJO;
 import esperimenti.templateservice.domain.IPCType;
+import esperimenti.templateservice.messages.CommandMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -23,30 +24,31 @@ public class TemplateService {
     @Autowired
     TemplateServicePort templateServicePort;
 
+    @Autowired
+    private MessagePublisherPort publisher;
+
     public void prosegui(List<CallPOJO> calls) throws JsonProcessingException{
 
         for(CallPOJO call:calls) {
 
-            if (call.isGoing_to_fail()){
+            if (call.getIpc_type() == IPCType.MESSAGE) {
 
-                if (call.getIpc_type() == IPCType.REST)
+                CommandMessage cm = new CommandMessage(call.isGoing_to_fail(), call.getNext_calls());
+                publisher.publish(cm, call.getService_to_call());
+
+            }else if (call.getIpc_type() == IPCType.REST) {
+
+                if (call.isGoing_to_fail()) {
+
                     templateServicePort.proseguiVersoServizoCheFallisce(call);
 
-                else if (call.getIpc_type() == IPCType.MESSAGE) {
-                    log.info("Message IPC not yet implemented");
-                    // TODO: Implementare messaging
-                }
+                }else {
 
-            }else {
-
-                if (call.getIpc_type() == IPCType.REST)
                     templateServicePort.proseguiVersoServizio(call);
 
-                else if (call.getIpc_type() == IPCType.MESSAGE) {
-                    log.info("Message IPC not yet implemented");
-                    // TODO: Implementare messaging
                 }
             }
+
         }
     }
 
