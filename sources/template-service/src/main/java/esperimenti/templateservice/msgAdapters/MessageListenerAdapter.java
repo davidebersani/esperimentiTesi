@@ -24,22 +24,12 @@ public class MessageListenerAdapter {
     private TemplateService templateService;
 
     @KafkaListener(topics = "${template.kafka.channel.in}", groupId="${template.kafka.groupid}")
-    public void listen(ConsumerRecord<String, CommandMessage> record) throws JsonProcessingException {
+    public void listen(ConsumerRecord<String, String> record) throws Exception {
 
-        CommandMessage cm = record.value();
+        String sequence = record.value();
 
         //log.info("record ricevuto: " + record.toString());
-        log.info("messaggio ricevuto: " + cm);
-
-        if(cm.isGoingToFail()) {
-            try {
-                templateService.errore(cm.getCalls());
-            } catch (Exception e)
-            {
-                // TODO: gestire l'eccezione
-            }
-        } else {
-            templateService.prosegui(cm.getCalls());
-        }
+        log.info("messaggio ricevuto: " + sequence);
+        this.templateService.parse(sequence);
     }
 }

@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface TemplateServicePort {
 
-    void proseguiVersoServizio(CallPOJO call) throws JsonProcessingException;
-
-    void proseguiVersoServizoCheFallisce(CallPOJO call) throws JsonProcessingException;
+    void proseguiVersoServizio(String message, String service) throws JsonProcessingException;
 
 }

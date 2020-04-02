@@ -22,18 +22,13 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
     private LoadBalancerClient loadBalancer;
 
     @Override
-    public void proseguiVersoServizio(CallPOJO call) throws JsonProcessingException {
-        eseguiChiamata(call, "/prosegui");
+    public void proseguiVersoServizio(String message, String service) throws JsonProcessingException {
+        eseguiChiamata(message,service);
     }
 
-    @Override
-    public void proseguiVersoServizoCheFallisce(CallPOJO call) throws JsonProcessingException {
-        eseguiChiamata(call, "/errore");
-    }
+    private void eseguiChiamata(String message, String service) throws JsonProcessingException {
 
-    private void eseguiChiamata(CallPOJO call, String endpoint) throws JsonProcessingException {
-
-        ServiceInstance instance = loadBalancer.choose(call.getService_to_call());
+        ServiceInstance instance = loadBalancer.choose(service);
 
         if(instance!=null) {
 
@@ -44,16 +39,16 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
 
             sb.append(instance.getUri().toString());
 
-            sb.append(endpoint);
+            sb.append("/prosegui");
 
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            String body = objectMapper.writeValueAsString(call.getNext_calls());
+            String body = message;
             log.info("Body convertito in json: " + body);
 
             HttpEntity<String> request = new HttpEntity<String>(body, headers);
 
-            log.info("Eseguo chiamata al servizio " + call.getService_to_call());
+            log.info("Eseguo chiamata al servizio " + service);
 
             try {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
@@ -67,4 +62,5 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
             // TODO: Sollevare eccezione
         }
     }
+
 }

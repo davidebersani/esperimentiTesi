@@ -14,11 +14,11 @@ import org.springframework.stereotype.Component;
 public class MessagePublisherAdapter implements MessagePublisherPort {
 
     @Autowired
-    private KafkaTemplate<String, CommandMessage> template;
+    private KafkaTemplate<String, String> template;
 
     @Override
-    public void publish(CommandMessage commandMessage, String service) {
-        log.info("invio al servizio: " + service + " il messaggio: " + commandMessage.toString());
-        template.send(service, commandMessage);
+    public void publish(String message, String service) {
+        log.info("invio al servizio: " + service + " il messaggio: " + message);
+        template.send(service, message);
     }
 }
