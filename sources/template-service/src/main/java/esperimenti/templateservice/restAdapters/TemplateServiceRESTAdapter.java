@@ -2,7 +2,6 @@ package esperimenti.templateservice.restAdapters;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import esperimenti.templateservice.domain.CallPOJO;
 import esperimenti.templateservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
             headers.setContentType(MediaType.APPLICATION_JSON);
 
             String body = message;
-            log.info("Body convertito in json: " + body);
+            log.info("Body da inviare: " + body);
 
             HttpEntity<String> request = new HttpEntity<String>(body, headers);
 
@@ -55,6 +54,7 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
                 log.info("Risposta chiamata: " + responseEntityStr);
             } catch (HttpServerErrorException e) {
                 //log.info("\nresponsebody: " + e.getResponseBodyAsString());
+                log.error("Errore durante la chiamata. Messaggio: " + e.getResponseBodyAsString());
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
             }
 

@@ -1,7 +1,5 @@
 package esperimenti.templateservice.msgAdapters;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import esperimenti.templateservice.messages.CommandMessage;
 import esperimenti.templateservice.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
