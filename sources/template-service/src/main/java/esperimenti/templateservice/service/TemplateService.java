@@ -1,20 +1,15 @@
 package esperimenti.templateservice.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import esperimenti.templateservice.domain.CallPOJO;
-import esperimenti.templateservice.domain.IPCType;
-import esperimenti.templateservice.messages.CommandMessage;
+import esperimenti.templateservice.domain.GeneratedException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.common.protocol.types.Field;
+import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -27,34 +22,46 @@ public class TemplateService {
     @Autowired
     private MessagePublisherPort publisher;
 
-    public void prosegui(List<CallPOJO> calls) throws JsonProcessingException{
+    public void callService(String serviceToCall, String payload) {
+        templateServicePort.makeRESTcallToService(serviceToCall, payload);
+    }
 
-        for(CallPOJO call:calls) {
+    public void notifyService(String serviceToNotify, String payload) {
+        publisher.notify(serviceToNotify, payload);
+    }
 
-            if (call.getIpc_type() == IPCType.MESSAGE) {
-
-                CommandMessage cm = new CommandMessage(call.isGoing_to_fail(), call.getNext_calls());
-                publisher.publish(cm, call.getService_to_call());
-
-            }else if (call.getIpc_type() == IPCType.REST) {
-
-                if (call.isGoing_to_fail()) {
-
-                    templateServicePort.proseguiVersoServizoCheFallisce(call);
-
-                }else {
-
-                    templateServicePort.proseguiVersoServizio(call);
-
-                }
-            }
-
+    public void sleep(long sleepTime) {
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            log.info("sono stato interrotto mentre dormivo" + e.toString());
         }
     }
 
-    public void errore(List<CallPOJO> calls) throws Exception {
-        log.info("è stato richiamato l'endpoint /errore che restituisce 500");
-        throw new Exception();
+    public void generateException(String exceptionMessage) throws GeneratedException {
+        throw new GeneratedException(exceptionMessage);
     }
 
+    /**
+     *
+     * @param listOfConcurrentOperations tripletta composta da:
+     *                                   0: tipo operazione (call/notify altrimenti ignorata)
+     *                                   1: servizio target
+     *                                   2: payload
+     */
+    public void executeConcurrentOperations(LinkedList<Triplet<String, String, String>> listOfConcurrentOperations) {
+
+        List<Thread> threadList = new ArrayList<>();
+
+        for(Triplet<String,String,String> op: listOfConcurrentOperations){
+            if (op.getValue0().equals("call"))
+                threadList.add( new Thread( () -> callService(op.getValue1(), op.getValue2()) ) );
+            else if(op.getValue0().equals("notify"))
+                threadList.add( new Thread( () -> notifyService(op.getValue1(), op.getValue2()) ) );
+        }
+
+        log.info("eseguo operazioni concorrenti");
+        threadList.parallelStream().forEach(Thread::start);
+
+    }
 }

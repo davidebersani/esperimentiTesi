@@ -7,17 +7,6 @@ services:
       context: ./eureka-server
     container_name: eureka
 
-  # Client
-  client-service:
-    build:
-      context: ./template-service
-    container_name: client-service
-    environment:
-      - spring.application.name=client
-    depends_on:
-      - "eureka"
-      - "kafka"
-
   # A
   a-service:
     build:
@@ -36,6 +25,17 @@ services:
     container_name: b-service
     environment:
       - spring.application.name=b
+    depends_on:
+      - "eureka"
+      - "kafka"
+
+  # C
+  c-service:
+    build:
+      context: ./template-service
+    container_name: c-service
+    environment:
+      - spring.application.name=c
     depends_on:
       - "eureka"
       - "kafka"
@@ -68,6 +68,6 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,client:4:1"
+      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,c:4:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

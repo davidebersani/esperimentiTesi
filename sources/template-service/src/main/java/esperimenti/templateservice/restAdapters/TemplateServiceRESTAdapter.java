@@ -1,8 +1,5 @@
 package esperimenti.templateservice.restAdapters;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import esperimenti.templateservice.domain.CallPOJO;
 import esperimenti.templateservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,49 +19,36 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
     private LoadBalancerClient loadBalancer;
 
     @Override
-    public void proseguiVersoServizio(CallPOJO call) throws JsonProcessingException {
-        eseguiChiamata(call, "/prosegui");
-    }
+    public void makeRESTcallToService(String serviceToCall, String payload) {
 
-    @Override
-    public void proseguiVersoServizoCheFallisce(CallPOJO call) throws JsonProcessingException {
-        eseguiChiamata(call, "/errore");
-    }
-
-    private void eseguiChiamata(CallPOJO call, String endpoint) throws JsonProcessingException {
-
-        ServiceInstance instance = loadBalancer.choose(call.getService_to_call());
+        ServiceInstance instance = loadBalancer.choose(serviceToCall);
 
         if(instance!=null) {
 
             StringBuilder sb = new StringBuilder();
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            ObjectMapper objectMapper = new ObjectMapper();
-
             sb.append(instance.getUri().toString());
+            sb.append("/prosegui");
 
-            sb.append(endpoint);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
 
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> request = new HttpEntity<String>(payload, headers);
 
-            String body = objectMapper.writeValueAsString(call.getNext_calls());
-            log.info("Body convertito in json: " + body);
+            //log.info("Eseguo chiamata al servizio " + serviceToCall);
 
-            HttpEntity<String> request = new HttpEntity<String>(body, headers);
-
-            log.info("Eseguo chiamata al servizio " + call.getService_to_call());
+            RestTemplate restTemplate = new RestTemplate();
 
             try {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
-                log.info("Risposta chiamata: " + responseEntityStr);
-            } catch (HttpServerErrorException e) {
-                //log.info("\nresponsebody: " + e.getResponseBodyAsString());
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
+                //log.info("Risposta chiamata: " + responseEntityStr);
+            }catch (HttpServerErrorException e) {
+                log.info("responsebody: " + e.getResponseBodyAsString());
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
             }
 
         }else {
-            // TODO: Sollevare eccezione
+            //log.info("servizio " + serviceToCall + " non trovato");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
         }
     }
 }
