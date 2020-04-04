@@ -7,6 +7,7 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,8 +43,11 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
                 //log.info("Risposta chiamata: " + responseEntityStr);
             }catch (HttpServerErrorException e) {
-                log.info("responsebody: " + e.getResponseBodyAsString());
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+                log.info("errore del server: " + e.toString());
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
+            }catch (HttpClientErrorException e) {
+                log.info("errore del client: " + e.toString());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "richiesta mal formattata");
             }
 
         }else {
