@@ -39,16 +39,17 @@ public class TemplateService {
                             "Consumer";
                     consumer = (StringConsumer) context.getBean(Class.forName(consumerName));
                 }
+            }catch(ClassNotFoundException e) {
+                log.error("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\". Messaggio:" + e.getMessage());
+                throw new Exception("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\".");
             }catch(NoSuchBeanDefinitionException e) {
-                log.error("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente. Messaggio:" + e.getMessage());
+                log.error("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\". Messaggio:" + e.getMessage());
+                throw new Exception("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\".");
             }catch(BeansException e) {
-                log.error("Errore nella creazione dell'azione. Messaggio: " + e.getMessage());
+                log.error("Errore nella creazione dell'azione \"" + parts[0] + "\". Messaggio: " + e.getMessage());
+                throw new Exception("Errore nella creazione dell'azione \"" + parts[0] + "\".");
             }
-            if(consumer==null) {
-                throw new Exception("Errore nell'esecuzione dell'azione.");
-            }else {
-                s = consumer.consume(s);
-            }
+            s = consumer.consume(s);
 
         }
 
