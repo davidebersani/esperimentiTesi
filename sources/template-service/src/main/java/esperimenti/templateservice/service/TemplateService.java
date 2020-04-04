@@ -32,7 +32,7 @@ public class TemplateService {
         try {
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
-            log.info("sono stato interrotto mentre dormivo" + e.toString());
+            log.info("sono stato interrotto mentre dormivo" + e.toString()); //TODO: non so bene come funziona
         }
     }
 
@@ -59,7 +59,7 @@ public class TemplateService {
         }
 
         log.info("eseguo operazioni concorrenti");
-        threadList.parallelStream().forEach(Thread::start);
+        threadList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
         log.info("ho eseguito le operazioni concorrenti");
 
     }

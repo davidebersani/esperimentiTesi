@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.StringJoiner;
 import java.util.StringTokenizer;
 
-@Service
+@Service //TODO: oppure component?
 @Slf4j
 public class OperationsStringParser {
 
@@ -118,18 +118,17 @@ public class OperationsStringParser {
         if(!st.hasMoreTokens())
             throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
 
-        try{
-            long sleepTime = Integer.parseInt(st.nextToken());
-            //log.info("metto il servizio in sleep per " + sleepTime + " mSec");
+        long sleepTime = Integer.parseInt(st.nextToken());
+        //log.info("metto il servizio in sleep per " + sleepTime + " mSec");
+        if(!st.hasMoreTokens() || !st.nextToken().equals(";"))
+            throw new MalformedStringOfOperationsException("ogni comando deve essere terminato con il carattere ';' anche sleep");
 
+        try{
             //richiama metodo che mette in sleep il servizio
             templateService.sleep(sleepTime);
         }catch(NumberFormatException e){
             throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero");
         }
-
-        if(!st.hasMoreTokens() || !st.nextToken().equals(";"))
-            throw new MalformedStringOfOperationsException("ogni comando deve essere terminato con il carattere ';' anche sleep");
     }
 
     private void processExc(StringTokenizer st) throws MalformedStringOfOperationsException, GeneratedException {
