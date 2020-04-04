@@ -60,6 +60,7 @@ public class TemplateService {
 
         log.info("eseguo operazioni concorrenti");
         threadList.parallelStream().forEach(Thread::start);
+        log.info("ho eseguito le operazioni concorrenti");
 
     }
 }

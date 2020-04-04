@@ -20,17 +20,15 @@ public class TemplateController {
 
 	@PostMapping(value = "/prosegui", consumes = "text/plain")
 	public void prosegui(@RequestBody String operations){
-
 		//log.info("stringa ricevuta: " + operations);
-	try{
-		operationsStringParser.parseOperations(operations);
-
-	}catch (MalformedStringOfOperationsException e){
-		log.info("exception: " + e.toString());
-		throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-	}catch (GeneratedException e){
-		log.info("exception: " + e.toString());
-		throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-	}
+		try{
+			operationsStringParser.parseOperations(operations);
+		}catch (MalformedStringOfOperationsException e){
+			log.info("exception: " + e.toString());
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		}catch (GeneratedException e){
+			log.info("exception: " + e.toString());
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+		}
 	}
 }

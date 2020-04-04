@@ -42,14 +42,13 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
             try {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
                 //log.info("Risposta chiamata: " + responseEntityStr);
-            }catch (HttpServerErrorException e) {
+            }catch (HttpServerErrorException e) { //TODO: perche non riesco ad ottenere il msg dell'eccezione ma ottengo null ?
                 log.info("errore del server: " + e.toString());
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza del servizio " + serviceToCall + " chiamata");
             }catch (HttpClientErrorException e) {
                 log.info("errore del client: " + e.toString());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "richiesta mal formattata");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "richiesta per il servizio " + serviceToCall + " mal formattata");
             }
-
         }else {
             //log.info("servizio " + serviceToCall + " non trovato");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");

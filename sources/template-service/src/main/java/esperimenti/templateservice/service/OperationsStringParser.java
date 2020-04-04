@@ -24,8 +24,8 @@ public class OperationsStringParser {
 
         StringTokenizer st = new StringTokenizer(operations," ");
         //log.info("num token generati: " + st.countTokens());
-        String token;
 
+        String token;
         while (st.hasMoreTokens()) {
             token = st.nextToken();
             //log.info("token processato: " + token);
