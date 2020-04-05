@@ -20,7 +20,7 @@ public class OperationConsumersLoggingAspect {
     }
 
     // Pointcut che rappresenta i metodi della classe TemplateService
-    @Pointcut("execution(* esperimenti.templateservice.service.operationConsumers.*(..))")
+    @Pointcut("execution(* esperimenti.templateservice.service.operationConsumers.*.*(..))")
     public void templateCalls() {}
 
     // Eseguito prima dell'esecuzione del metodo
