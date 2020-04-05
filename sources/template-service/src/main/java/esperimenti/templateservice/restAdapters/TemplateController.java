@@ -23,11 +23,14 @@ public class TemplateController {
 		//log.info("stringa ricevuta: " + operations);
 		try{
 			operationsStringParser.parseOperations(operations);
-		}catch (MalformedStringOfOperationsException e){
-			log.info("exception: " + e.toString());
+		}catch (MalformedStringOfOperationsException e) {
+			//in caso la porzione di stringa di operazioni elaborata da questo servizio sia malformattata
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		}catch (GeneratedException e){
-			log.info("exception: " + e.toString());
+		}catch (ResponseStatusException e){
+			//in caso una successiva chiamata REST ritorni un errore
+			throw e;
+		}catch (Exception e){
+			//in caso si verifichi una qualsiasi eccezione nel servizio
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}

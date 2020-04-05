@@ -10,17 +10,17 @@ import java.util.Arrays;
 @Component
 @Aspect
 @Slf4j
-public class TemplateServiceLoggingAspect {
+public class OperationConsumersLoggingAspect {
 
     private static void logWithType(JoinPoint joinPoint, LoggingType loggingType) {
-        String context = "SERVICE";
+        String context = "CONSUMERS";
         final String args = Arrays.toString(joinPoint.getArgs());
         final String methodName = joinPoint.getSignature().toShortString().replace("(..)", "()");
         log.info("{} context:{} [method:{}, args:{}]", loggingType, context, methodName, args);
     }
 
     // Pointcut che rappresenta i metodi della classe TemplateService
-    @Pointcut("execution(* esperimenti.templateservice.service.*.*(..))")
+    @Pointcut("execution(* esperimenti.templateservice.service.operationConsumers.*(..))")
     public void templateCalls() {}
 
     // Eseguito prima dell'esecuzione del metodo

@@ -34,7 +34,7 @@ public class MessageListenerAdapter {
         //log.info("messaggio ricevuto: " + receivedMessage);
         try {
             operationsStringParser.parseOperations(receivedMessage);
-        } catch (MalformedStringOfOperationsException | GeneratedException e) {
+        } catch (Exception e ) {
             e.printStackTrace(); //TODO: gestire eccezione (cosa fare?)
         }
 

@@ -1,5 +1,6 @@
 package esperimenti.templateservice.restAdapters;
 
+import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,12 +43,12 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
             try {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
                 //log.info("Risposta chiamata: " + responseEntityStr);
-            }catch (HttpServerErrorException e) { //TODO: perche non riesco ad ottenere il msg dell'eccezione ma ottengo null ?
-                log.info("errore del server: " + e.toString());
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza del servizio " + serviceToCall + " chiamata");
+            }catch (HttpServerErrorException e) {
+                log.info("errore del server: " + e.toString() + " body: " + e.getResponseBodyAsString());
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "messaggio: " + e.getResponseBodyAsString());
             }catch (HttpClientErrorException e) {
-                log.info("errore del client: " + e.toString());
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "richiesta per il servizio " + serviceToCall + " mal formattata");
+                log.info("errore del client: " + e.toString() + " body: "  + e.getResponseBodyAsString());
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "messaggio: " + e.getResponseBodyAsString());
             }
         }else {
             //log.info("servizio " + serviceToCall + " non trovato");
