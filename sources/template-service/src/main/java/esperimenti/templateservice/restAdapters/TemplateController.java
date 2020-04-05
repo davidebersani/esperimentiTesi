@@ -30,7 +30,7 @@ public class TemplateController {
 			//in caso una successiva chiamata REST ritorni un errore
 			throw e;
 		}catch (Exception e){
-			//in caso si verifichi una qualsiasi eccezione nel servizio
+			//in caso si verifichi una qualsiasi eccezione nel servizio (anche GeneratedException)
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}

@@ -37,7 +37,7 @@ public class TemplateService {
     }
 
     public void generateException(String exceptionMessage) throws GeneratedException {
-        throw new GeneratedException(exceptionMessage);
+        throw new GeneratedException(exceptionMessage); //TODO: aggiungere nome del servizio che genera l'eccezione
     }
 
     /**

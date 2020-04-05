@@ -4,6 +4,7 @@ import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.service.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.StringTokenizer;
@@ -11,6 +12,7 @@ import java.util.StringTokenizer;
 @Component
 public class ExceptionConsumer implements OperationConsumer {
 
+    @Autowired
     TemplateService templateService;
 
     @Override

@@ -17,9 +17,6 @@ import java.util.StringTokenizer;
 public class OperationsStringParser {
 
     @Autowired
-    private TemplateService templateService;
-
-    @Autowired
     private ApplicationContext context;
 
     public void parseOperations(String operations) throws MalformedStringOfOperationsException, GeneratedException, Exception {
