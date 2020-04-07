@@ -1,8 +1,8 @@
 package esperimenti.templateservice.restAdapters;
 
-import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.service.OperationsStringParser;
+import io.micrometer.core.instrument.Metrics;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class TemplateController {
 			//in caso una successiva chiamata REST ritorni un errore
 			throw e;
 		}catch (Exception e){
-			//in caso si verifichi una qualsiasi eccezione nel servizio (anche GeneratedException)
+			//in caso si verifichi una qualsiasi altra eccezione nel servizio (anche GeneratedException)
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}

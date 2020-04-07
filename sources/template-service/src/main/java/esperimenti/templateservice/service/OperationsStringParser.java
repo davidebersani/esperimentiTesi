@@ -52,7 +52,6 @@ public class OperationsStringParser {
         }
     }
 
-
     /**
      * Dato un tokenizer posizionato sul token corrispondente a openingBracket
      * ritorna la stringa contenuta fino al corrispondente closingBracket escluso (tiene conto dei diversi livelli di annidamento).

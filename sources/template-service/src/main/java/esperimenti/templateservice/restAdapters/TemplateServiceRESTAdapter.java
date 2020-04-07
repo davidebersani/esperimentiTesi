@@ -1,18 +1,13 @@
 package esperimenti.templateservice.restAdapters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.netflix.client.http.HttpResponse;
-import com.netflix.ribbon.http.HttpResponseValidator;
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.service.TemplateServicePort;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.HttpStatusCodeException;
