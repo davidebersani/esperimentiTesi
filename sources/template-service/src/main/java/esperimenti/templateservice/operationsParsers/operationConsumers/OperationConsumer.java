@@ -1,4 +1,4 @@
-package esperimenti.templateservice.service.operationConsumers;
+package esperimenti.templateservice.operationsParsers.operationConsumers;
 
 import java.util.StringTokenizer;
 

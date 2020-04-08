@@ -1,8 +1,8 @@
-package esperimenti.templateservice.service;
+package esperimenti.templateservice.operationsParsers;
 
 import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.service.operationConsumers.OperationConsumer;
+import esperimenti.templateservice.operationsParsers.operationConsumers.OperationConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class OperationsStringParser {
             //log.info("token processato: " + token);
 
             try {
-                String consumerName = "esperimenti.templateservice.service.operationConsumers." +
+                String consumerName = "esperimenti.templateservice.operationsParsers.operationConsumers." +
                             String.valueOf(token.charAt(0)).toUpperCase() + token.substring(1) + "Consumer";
                 consumer = (OperationConsumer) context.getBean(Class.forName(consumerName));
 

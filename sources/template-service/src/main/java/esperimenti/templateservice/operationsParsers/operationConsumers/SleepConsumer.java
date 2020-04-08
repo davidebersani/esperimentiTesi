@@ -1,4 +1,4 @@
-package esperimenti.templateservice.service.operationConsumers;
+package esperimenti.templateservice.operationsParsers.operationConsumers;
 
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.service.TemplateService;

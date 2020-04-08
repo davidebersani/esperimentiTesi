@@ -1,8 +1,6 @@
 package esperimenti.templateservice.msgAdapters;
 
-import esperimenti.templateservice.domain.GeneratedException;
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.service.OperationsStringParser;
+import esperimenti.templateservice.operationsParsers.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;

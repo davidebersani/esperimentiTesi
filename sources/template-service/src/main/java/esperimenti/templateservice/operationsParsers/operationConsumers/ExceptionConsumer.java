@@ -1,8 +1,8 @@
-package esperimenti.templateservice.service.operationConsumers;
+package esperimenti.templateservice.operationsParsers.operationConsumers;
 
 import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.service.OperationsStringParser;
+import esperimenti.templateservice.operationsParsers.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
