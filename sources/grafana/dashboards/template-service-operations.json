@@ -2,6 +2,7 @@
   "annotations": {
     "list": [
       {
+        "$$hashKey": "object:113",
         "builtIn": 1,
         "datasource": "-- Grafana --",
         "enable": true,
@@ -15,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
+  "id": null,
   "links": [],
   "panels": [
     {
@@ -33,7 +34,7 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 4,
+      "id": 2,
       "legend": {
         "avg": false,
         "current": false,
@@ -59,17 +60,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (uri) ( rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[30s]) )",
+          "expr": "sum by (operation) (rate(template_service_operations_seconds_sum{job=\"a-actuator\"}[30s]))/sum by (operation) (rate(template_service_operations_seconds_count{job=\"a-actuator\"}[30s]))",
+          "hide": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Numero di richieste al secondo",
+      "title": "Latenza operazioni Servizio A",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -85,6 +87,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:209",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -93,6 +96,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:210",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -121,7 +125,7 @@
         "y": 0
       },
       "hiddenSeries": false,
-      "id": 5,
+      "id": 3,
       "legend": {
         "avg": false,
         "current": false,
@@ -147,17 +151,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_count{uri=\"/prosegui\", status=~\"[4|5].*\"}[30s])",
+          "expr": "sum by (operation) (rate(template_service_operations_seconds_sum{job=\"b-actuator\"}[30s]))/sum by (operation) (rate(template_service_operations_seconds_count{job=\"b-actuator\"}[30s]))",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{application}} - status: {{status}}",
-          "refId": "A"
+          "legendFormat": "",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Numero di richieste al secondo fallite al secondo",
+      "title": "Latenza operazioni Servizio B",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -173,6 +178,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:209",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -181,6 +187,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:210",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -203,14 +210,13 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 9,
+        "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 6,
         "y": 8
       },
       "hiddenSeries": false,
-      "id": 2,
-      "interval": "",
+      "id": 4,
       "legend": {
         "avg": false,
         "current": false,
@@ -236,17 +242,18 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_sum{uri=\"/prosegui\"}[30s])/rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[30s])  ",
+          "expr": "sum by (operation) (rate(template_service_operations_seconds_sum{job=\"c-actuator\"}[30s]))/sum by (operation) (rate(template_service_operations_seconds_count{job=\"c-actuator\"}[30s]))",
+          "hide": false,
           "interval": "",
-          "legendFormat": "{{application}} - status: {{status}}",
-          "refId": "A"
+          "legendFormat": "",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Latenza",
+      "title": "Latenza operazioni Servizio C",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -262,6 +269,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:209",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -270,6 +278,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:210",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -310,10 +319,10 @@
     ]
   },
   "timezone": "",
-  "title": "Endpoint Rest Prosegui",
-  "uid": "6PuR-pCZk",
+  "title": "Template Service Operations",
+  "uid": "obmy6BjWk",
   "variables": {
     "list": []
   },
-  "version": 25
+  "version": 2
 }
