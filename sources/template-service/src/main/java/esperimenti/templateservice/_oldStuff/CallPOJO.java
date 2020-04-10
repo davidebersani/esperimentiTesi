@@ -1,4 +1,4 @@
-package esperimenti.templateservice.domain;
+package esperimenti.templateservice._oldStuff;
 
 import java.util.List;
 
@@ -11,6 +11,8 @@ public class CallPOJO {
     private boolean going_to_fail;
 
     private List<CallPOJO> next_calls;
+
+    public CallPOJO(){}
 
     public CallPOJO(String service_to_call, IPCType ipc_type, boolean going_to_fail, List<CallPOJO> next_calls) {
         this.service_to_call = service_to_call;

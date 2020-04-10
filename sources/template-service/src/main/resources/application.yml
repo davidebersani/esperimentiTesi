@@ -3,8 +3,24 @@
 spring: 
   application: 
     name: template
+  kafka:
+    bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ${template.kafka.grouid}
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: "*"
 
-eureka: 
+
+eureka:
   client: 
     serviceUrl: 
 #      defaultZone: http://localhost:8761/eureka/ check this url
@@ -18,3 +34,18 @@ eureka:
 # Porta casuale
 server: 
   port: ${PORT:${SERVER_PORT:0}}
+
+# Kafka
+template:
+  kafka:
+    groupid: ${spring.application.name}
+    channel:
+      in: ${spring.application.name}
+
+
+# Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus

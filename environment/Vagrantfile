@@ -33,9 +33,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         node.vm.network "forwarded_port", guest: 22, host: 2222, id: 'ssh', auto_correct: true 
         node.ssh.forward_agent = true
         node.vm.network "forwarded_port", guest: 8080, host: 8080, id: 'http', auto_correct: true
-        # node.vm.network "forwarded_port", guest: 9092, host: 9092, id: 'kafka', auto_correct: true
-
-        # Provisioning
+        node.vm.network "forwarded_port", guest: 9090, host: 9090, id: 'prometheus', auto_correct: true
+	node.vm.network "forwarded_port", guest: 3000, host: 3000, id: 'grafana', auto_correct: true
+        node.vm.network "forwarded_port", guest: 9092, host: 9092, id: 'kafka', auto_correct: true
+        
+	# Provisioning
         node.vm.provision :shell, :inline => 'apt update'
         # Installazione Java
         node.vm.provision :shell, :inline => 'apt install -y openjdk-8-jdk'
