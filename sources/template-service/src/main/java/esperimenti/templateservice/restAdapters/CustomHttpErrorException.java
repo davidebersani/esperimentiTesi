@@ -1,6 +1,7 @@
 package esperimenti.templateservice.restAdapters;
 
 public class CustomHttpErrorException {
+
     public String timestamp;
     public String status;
     public String error;

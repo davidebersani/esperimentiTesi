@@ -9,6 +9,7 @@ import java.util.Arrays;
 @Slf4j
 @Aspect
 public abstract class BeforeAndAfterLogging {
+
     private String context;
 
     public BeforeAndAfterLogging() {

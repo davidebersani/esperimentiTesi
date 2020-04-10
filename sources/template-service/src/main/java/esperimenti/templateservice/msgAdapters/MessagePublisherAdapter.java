@@ -7,7 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-//@EnableAutoConfiguration
 @Slf4j
 public class MessagePublisherAdapter implements MessagePublisherPort {
 
