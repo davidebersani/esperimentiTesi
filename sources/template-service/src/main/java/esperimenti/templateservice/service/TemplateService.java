@@ -1,22 +1,20 @@
 package esperimenti.templateservice.service;
 
 import esperimenti.templateservice.domain.GeneratedException;
+import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
-import org.javatuples.Triplet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 @Service
 @Slf4j
 public class TemplateService {
 
     @Autowired
-    TemplateServicePort templateServicePort;
+    private TemplateServicePort templateServicePort;
 
     @Autowired
     private MessagePublisherPort publisher;
@@ -50,21 +48,62 @@ public class TemplateService {
 
     /**
      *
-     * @param listOfConcurrentOperations tripletta composta da:
-     *                                   0: tipo operazione (call/notify altrimenti ignorata)
-     *                                   1: servizio target
-     *                                   2: payload
+     * @param listOfConcurrentOperations ArrayList composto da:
+     *                                   0: tipo operazione (call/notify/exception/sleep altrimenti ignorata)
+     *                                   1: servizio target (per call/notify) - sleep time (per sleep) - messaggio di eccezione (per exception)
+     *                                   2: payload (per call/notify)
      */
     @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
-    public void executeConcurrentOperations(LinkedList<Triplet<String, String, String>> listOfConcurrentOperations) {
+    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException {
 
-        List<Thread> threadList = new ArrayList<>();
+        ArrayList<Thread> threadList = new ArrayList<>();
 
-        for(Triplet<String,String,String> op: listOfConcurrentOperations){
-            if (op.getValue0().equals("call"))
-                threadList.add( new Thread( () -> callService(op.getValue1(), op.getValue2()) ) );
-            else if(op.getValue0().equals("notify"))
-                threadList.add( new Thread( () -> notifyService(op.getValue1(), op.getValue2()) ) );
+        for(ArrayList<String> op: listOfConcurrentOperations){
+
+            log.info("operazione: " + op.toString());
+
+            // le operazioni con un numero errato di parametri vengono ignorate senza riportare eccezioni //TODO: forse riporta eccezioni
+            if(op.size() > 0){
+
+                switch (op.get(0)) {
+                    case "call":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione call deve essere seguita dal nome del servizio che si " +
+                                    "vuole chiamare e dal payload da inviargli");
+
+                        threadList.add(new Thread(() -> callService(op.get(1), op.get(2))));
+                        break;
+                    case "notify":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione notify deve essere seguita dal nome del servizio a cui si " +
+                                    "vuole inviare il messaggio e dal messaggio stesso");
+
+                        threadList.add(new Thread(() -> notifyService(op.get(1), op.get(2))));
+                        break;
+                    case "exception":
+                        if(!(op.size() == 2))
+                            throw new MalformedStringOfOperationsException("L'operazione exception deve essere seguita dal messaggio dell'eccezione");
+
+                        threadList.add(new Thread(() -> {
+                            try {
+                                generateException(op.get(1));
+                            } catch (GeneratedException e) {
+                                log.info("GeneratedException catturata in lambda");
+                                throw new RuntimeException("GeneratedException catturata in lambda", e); //TODO: provvisiorio (come riportarla?)
+                            }
+                        }));
+                        break;
+                    case "sleep":
+                        if(!(op.size() == 2))
+                            throw new MalformedStringOfOperationsException("L'operazione sleep deve essere seguita dalla durata dello sleep");
+
+                        try {
+                            threadList.add(new Thread(() -> sleep(Long.parseLong(op.get(1)))));
+                        }catch(NumberFormatException e){
+                            throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
+                        }
+                }
+            }
         }
 
         log.info("eseguo operazioni concorrenti");
