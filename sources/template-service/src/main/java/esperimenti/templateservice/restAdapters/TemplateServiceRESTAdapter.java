@@ -1,6 +1,5 @@
 package esperimenti.templateservice.restAdapters;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import esperimenti.templateservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
@@ -9,9 +8,13 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
 
 @Component
 @Slf4j
@@ -21,46 +24,53 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
     private LoadBalancerClient loadBalancer;
 
     @Override
-    public void proseguiVersoServizio(String message, String service) throws JsonProcessingException {
-        eseguiChiamata(message,service);
-    }
+    public void makeRESTcallToService(String serviceToCall, String payload) {
 
-    private void eseguiChiamata(String message, String service) throws JsonProcessingException {
-
-        ServiceInstance instance = loadBalancer.choose(service);
+        ServiceInstance instance = loadBalancer.choose(serviceToCall);
 
         if(instance!=null) {
 
             StringBuilder sb = new StringBuilder();
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            ObjectMapper objectMapper = new ObjectMapper();
-
             sb.append(instance.getUri().toString());
-
             sb.append("/prosegui");
 
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.TEXT_PLAIN);
 
-            String body = message;
-            log.info("Body da inviare: " + body);
+            HttpEntity<String> request = new HttpEntity<String>(payload, headers);
 
-            HttpEntity<String> request = new HttpEntity<String>(body, headers);
+            //log.info("Eseguo chiamata al servizio " + serviceToCall);
 
-            log.info("Eseguo chiamata al servizio " + service);
+            RestTemplate restTemplate = new RestTemplate();
 
             try {
                 ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
-                log.info("Risposta chiamata: " + responseEntityStr);
-            } catch (HttpServerErrorException e) {
-                //log.info("\nresponsebody: " + e.getResponseBodyAsString());
-                log.error("Errore durante la chiamata. Messaggio: " + e.getResponseBodyAsString());
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "si è verificato un errore nell'istanza chiamata");
+                //log.info("Risposta chiamata: " + responseEntityStr);
+            }catch (HttpServerErrorException.InternalServerError e) {
+                log.info("errore del server con msg: " + getMessageOfHttpErrorException(e));
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getMessageOfHttpErrorException(e));
+            }catch (HttpClientErrorException.BadRequest e) {
+                log.info("errore del client con msg: " + getMessageOfHttpErrorException(e));
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, getMessageOfHttpErrorException(e));
             }
-
         }else {
-            // TODO: Sollevare eccezione
+            //log.info("servizio " + serviceToCall + " non trovato");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
         }
     }
 
+    private String getMessageOfHttpErrorException(HttpStatusCodeException e) {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String messageOfHttpErrorException;
+
+        try {
+            messageOfHttpErrorException = mapper.readValue(e.getResponseBodyAsString(), CustomHttpErrorException.class).getMessage();
+        } catch (IOException ex) {
+            log.info("IOException: " + ex.toString());
+            messageOfHttpErrorException = "no message retrieved";
+        }
+
+        return messageOfHttpErrorException;
+    }
 }

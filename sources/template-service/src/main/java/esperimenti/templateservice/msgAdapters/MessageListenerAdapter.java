@@ -1,5 +1,6 @@
 package esperimenti.templateservice.msgAdapters;
 
+import esperimenti.templateservice.operationsParsers.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -19,15 +20,21 @@ public class MessageListenerAdapter {
     private String groupId;
 
     @Autowired
+    OperationsStringParser operationsStringParser;
+
+    @Autowired
     private TemplateService templateService;
 
     @KafkaListener(topics = "${template.kafka.channel.in}", groupId="${template.kafka.groupid}")
-    public void listen(ConsumerRecord<String, String> record) throws Exception {
+    public void listen(ConsumerRecord<String, String> record) {
 
-        String sequence = record.value();
+        String receivedMessage = record.value();
+        //log.info("messaggio ricevuto: " + receivedMessage);
+        try {
+            operationsStringParser.parseOperations(receivedMessage);
+        } catch (Exception e ) {
+            e.printStackTrace(); //TODO: gestire eccezione (cosa fare?)
+        }
 
-        //log.info("record ricevuto: " + record.toString());
-        log.info("messaggio ricevuto: " + sequence);
-        this.templateService.parse(sequence);
     }
 }

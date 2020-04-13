@@ -1,59 +1,114 @@
 package esperimenti.templateservice.service;
 
-import esperimenti.templateservice.service.stringconsumers.ConcurrentConsumer;
-import esperimenti.templateservice.service.stringconsumers.StringConsumer;
+import esperimenti.templateservice.domain.GeneratedException;
+import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @Slf4j
 public class TemplateService {
 
     @Autowired
-    ApplicationContext context;
+    private TemplateServicePort templateServicePort;
 
-    /**
-     * Metodo che interpreta ed esegue le chiamate descritte dalla stringa s;
-     *
-     * @param s stringa che descrive la sequenza di chiamate
-     * @throws Exception
-     */
-    public void parse(String s) throws Exception {
-        StringConsumer consumer = null;
-        // Finchè la stringa non è vuota (ci sono comandi) vado avanti
-        while(!s.trim().isEmpty() && !s.equals(" ")) {
-            s = s.trim();   // Tolgo possibili spazi all'inizio della stringa che potrebbero darmi problemi
-            String[] parts = s.split(" ", 2);   // Divido la stringa in [comando, resto della stringa]
-            // Creo il comando
-            try {
-                if (parts[0].equals("["))
-                    consumer = context.getBean(ConcurrentConsumer.class);
-                else {
-                    String consumerName = "esperimenti.templateservice.service.stringconsumers." +
-                            String.valueOf(parts[0].charAt(0)).toUpperCase() +
-                            parts[0].substring(1).toLowerCase() +
-                            "Consumer";
-                    consumer = (StringConsumer) context.getBean(Class.forName(consumerName));
-                }
-            }catch(ClassNotFoundException e) {
-                log.error("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\". Messaggio:" + e.getMessage());
-                throw new Exception("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\".");
-            }catch(NoSuchBeanDefinitionException e) {
-                log.error("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\". Messaggio:" + e.getMessage());
-                throw new Exception("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a \""+ parts[0] + "\".");
-            }catch(BeansException e) {
-                log.error("Errore nella creazione dell'azione \"" + parts[0] + "\". Messaggio: " + e.getMessage());
-                throw new Exception("Errore nella creazione dell'azione \"" + parts[0] + "\".");
-            }
-            s = consumer.consume(s);
+    @Autowired
+    private MessagePublisherPort publisher;
 
-        }
-
+    @Timed(value="template.service.operations", description = "timer per call", extraTags = {"operation" , "call"})
+    public void callService(String serviceToCall, String payload) {
+        templateServicePort.makeRESTcallToService(serviceToCall, payload);
     }
 
 
+    @Timed(value="template.service.operations", extraTags = {"operation" , "notify"})
+    public void notifyService(String serviceToNotify, String payload) {
+        publisher.notify(serviceToNotify, payload);
+    }
+
+
+    @Timed(value="template.service.operations",extraTags = {"operation" , "sleep"})
+    public void sleep(long sleepTime) {
+        try {
+            Thread.sleep(sleepTime);
+        } catch (InterruptedException e) {
+            log.info("sono stato interrotto mentre dormivo" + e.toString()); //TODO: non so bene come funziona
+        }
+    }
+
+
+    @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
+    public void generateException(String exceptionMessage) throws GeneratedException {
+        throw new GeneratedException(exceptionMessage); //TODO: aggiungere nome del servizio che genera l'eccezione
+    }
+
+    /**
+     *
+     * @param listOfConcurrentOperations ArrayList composto da:
+     *                                   0: tipo operazione (call/notify/exception/sleep altrimenti ignorata)
+     *                                   1: servizio target (per call/notify) - sleep time (per sleep) - messaggio di eccezione (per exception)
+     *                                   2: payload (per call/notify)
+     */
+    @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
+    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException {
+
+        ArrayList<Thread> threadList = new ArrayList<>();
+
+        for(ArrayList<String> op: listOfConcurrentOperations){
+
+            log.info("operazione: " + op.toString());
+
+            // le operazioni con un numero errato di parametri vengono ignorate senza riportare eccezioni //TODO: forse riporta eccezioni
+            if(op.size() > 0){
+
+                switch (op.get(0)) {
+                    case "call":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione call deve essere seguita dal nome del servizio che si " +
+                                    "vuole chiamare e dal payload da inviargli");
+
+                        threadList.add(new Thread(() -> callService(op.get(1), op.get(2))));
+                        break;
+                    case "notify":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione notify deve essere seguita dal nome del servizio a cui si " +
+                                    "vuole inviare il messaggio e dal messaggio stesso");
+
+                        threadList.add(new Thread(() -> notifyService(op.get(1), op.get(2))));
+                        break;
+                    case "exception":
+                        if(!(op.size() == 2))
+                            throw new MalformedStringOfOperationsException("L'operazione exception deve essere seguita dal messaggio dell'eccezione");
+
+                        threadList.add(new Thread(() -> {
+                            try {
+                                generateException(op.get(1));
+                            } catch (GeneratedException e) {
+                                log.info("GeneratedException catturata in lambda");
+                                throw new RuntimeException("GeneratedException catturata in lambda", e); //TODO: provvisiorio (come riportarla?)
+                            }
+                        }));
+                        break;
+                    case "sleep":
+                        if(!(op.size() == 2))
+                            throw new MalformedStringOfOperationsException("L'operazione sleep deve essere seguita dalla durata dello sleep");
+
+                        try {
+                            threadList.add(new Thread(() -> sleep(Long.parseLong(op.get(1)))));
+                        }catch(NumberFormatException e){
+                            throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
+                        }
+                }
+            }
+        }
+
+        log.info("eseguo operazioni concorrenti");
+        threadList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
+        log.info("ho eseguito le operazioni concorrenti");
+
+    }
 }

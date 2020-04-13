@@ -1,22 +1,32 @@
 version: '3'
 services:
 
+  # Prometheus server
+  prometheus:
+    build:
+      context: ./prometheus-server
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+
+  # Grafana
+  grafana:
+    build:
+      context: ./grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "prometheus"
+    volumes:
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+
   # Eureka
   eureka:
     build:
       context: ./eureka-server
     container_name: eureka
-
-  # Client
-  client-service:
-    build:
-      context: ./template-service
-    container_name: client-service
-    environment:
-      - spring.application.name=client
-    depends_on:
-      - "eureka"
-      - "kafka"
 
   # A
   a-service:
@@ -40,13 +50,24 @@ services:
       - "eureka"
       - "kafka"
 
+  # C
+  c-service:
+    build:
+      context: ./template-service
+    container_name: c-service
+    environment:
+      - spring.application.name=c
+    depends_on:
+      - "eureka"
+      - "kafka"
+
   # Zuul
   zuul:
     build:
       context: ./zuul-gateway
     container_name: zuul
     ports:
-    - "8080:8080"
+      - "8080:8080"
     depends_on:
       - "eureka"
 
@@ -68,6 +89,6 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,client:4:1"
+      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,c:4:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock

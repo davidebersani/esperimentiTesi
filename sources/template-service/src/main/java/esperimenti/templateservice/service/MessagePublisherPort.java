@@ -2,6 +2,6 @@ package esperimenti.templateservice.service;
 
 public interface MessagePublisherPort {
 
-    public void publish(String message, String service);
+    void notify(String serviceToNotify, String payload);
 
 }

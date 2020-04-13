@@ -1,6 +1,6 @@
-package esperimenti.templateservice.messages;
+package esperimenti.templateservice._oldStuff;
 
-import esperimenti.templateservice.domain.CallPOJO;
+import esperimenti.templateservice._oldStuff.CallPOJO;
 
 import java.util.List;
 

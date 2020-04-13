@@ -7,7 +7,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-//@EnableAutoConfiguration
 @Slf4j
 public class MessagePublisherAdapter implements MessagePublisherPort {
 
@@ -15,8 +14,7 @@ public class MessagePublisherAdapter implements MessagePublisherPort {
     private KafkaTemplate<String, String> template;
 
     @Override
-    public void publish(String message, String service) {
-        log.info("invio al servizio: " + service + " il messaggio: " + message);
-        template.send(service, message);
+    public void notify(String serviceToNotify, String payload) {
+        template.send(serviceToNotify, payload);
     }
 }
