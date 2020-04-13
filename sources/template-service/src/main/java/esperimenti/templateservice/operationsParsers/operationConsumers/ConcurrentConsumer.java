@@ -18,7 +18,7 @@ public class ConcurrentConsumer implements OperationConsumer {
     TemplateService templateService;
 
     @Override
-    public void consume(StringTokenizer st) throws MalformedStringOfOperationsException {
+    public void consume(StringTokenizer st) throws MalformedStringOfOperationsException, InterruptedException {
 
         String concurrentOperations = OperationsStringParser.checkBracketsAndGetWhatsInside(st, "[", "]");
         //log.info("operazioni concorrenti: " + concurrentOperations);
