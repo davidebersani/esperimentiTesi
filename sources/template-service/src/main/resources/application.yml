@@ -21,8 +21,10 @@ spring:
 
 
 eureka:
-  client: 
-    serviceUrl: 
+  client:
+    healthcheck:
+      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
+    serviceUrl:
 #      defaultZone: http://localhost:8761/eureka/ check this url
       defaultZone: http://eureka:8761/eureka/
 # leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
@@ -42,10 +44,15 @@ template:
     channel:
       in: ${spring.application.name}
 
-
+# HEALTH ENDPOINT
 # Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
 management:
   endpoints:
     web:
       exposure:
         include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always    # Espone dettagli sul health endpoint 
+
+
