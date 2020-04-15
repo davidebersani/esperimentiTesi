@@ -1,10 +1,9 @@
 #!/bin/sh
 # Script che simula un determinato comportamento di un client, utile per verifiacare il comportamento del sistema, per esempio utilizzando grafana.
-# In particolare, questo script esegue delle semplici chiamate rest ai servizi A,B e C.
-# Le prime chiamte sono senza ulteriori istruzioni all'interno. Le successive introducono un ritardo. per ciascuna chiamata.
+# In particolare, questo script esegue delle semplici chiamate rest ai servizi A,B e C. Esegue le chiamate una dopo l'altra.
+# Le prime chiamate sono senza ulteriori istruzioni all'interno. Le successive introducono un ritardo. per ciascuna chiamata.
 # Quindi si dovrebbe notare, in un primo momento, un alto numero di chiamate al secondo per i vari servizi e una latenza molto bassa per l'endopoint /prosegui.
 # Successivamente il numero di chiamate al secondo dovrebbe diminuire in quanto si alzerà la latenza dell'endpoint.
-# DA PROVARE: Eseguire le chiamate in parallelo. Così il numero di richieste al secondo dovrebbe diminuire di meno.
 
 echo "Eseguo chiamate semplici."
 
