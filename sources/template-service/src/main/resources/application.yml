@@ -56,6 +56,6 @@ management:
         include: health,info,prometheus
   endpoint:
     health:
-      show-details: always    # Espone dettagli sul health endpoint 
+      show-details: always    # Espone dettagli sul health endpoint
 
 

@@ -13,11 +13,8 @@ import java.util.concurrent.TimeoutException;
 @Component
 public class KafkaHealthIndicator implements HealthIndicator {
 
+    @Autowired
     private KafkaTemplate<String, String> kafka;
-
-    public KafkaHealthIndicator(@Autowired KafkaTemplate<String, String> kafka) {
-        this.kafka = kafka;
-    }
 
     /**
      * Return an indication of health.
