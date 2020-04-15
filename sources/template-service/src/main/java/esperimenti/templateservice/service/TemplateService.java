@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -54,9 +58,9 @@ public class TemplateService {
      *                                   2: payload (per call/notify)
      */
     @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
-    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException {
+    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException {
 
-        ArrayList<Thread> threadList = new ArrayList<>();
+        List<Runnable> runnableList = new ArrayList<>();
 
         for(ArrayList<String> op: listOfConcurrentOperations){
 
@@ -71,34 +75,34 @@ public class TemplateService {
                             throw new MalformedStringOfOperationsException("L'operazione call deve essere seguita dal nome del servizio che si " +
                                     "vuole chiamare e dal payload da inviargli");
 
-                        threadList.add(new Thread(() -> callService(op.get(1), op.get(2))));
+                        runnableList.add(() -> callService(op.get(1), op.get(2)));
                         break;
                     case "notify":
                         if(!(op.size() == 3))
                             throw new MalformedStringOfOperationsException("L'operazione notify deve essere seguita dal nome del servizio a cui si " +
                                     "vuole inviare il messaggio e dal messaggio stesso");
 
-                        threadList.add(new Thread(() -> notifyService(op.get(1), op.get(2))));
+                        runnableList.add(() -> notifyService(op.get(1), op.get(2)));
                         break;
                     case "exception":
                         if(!(op.size() == 2))
                             throw new MalformedStringOfOperationsException("L'operazione exception deve essere seguita dal messaggio dell'eccezione");
 
-                        threadList.add(new Thread(() -> {
+                        runnableList.add(() -> {
                             try {
                                 generateException(op.get(1));
                             } catch (GeneratedException e) {
                                 log.info("GeneratedException catturata in lambda");
                                 throw new RuntimeException("GeneratedException catturata in lambda", e); //TODO: provvisiorio (come riportarla?)
                             }
-                        }));
+                        });
                         break;
                     case "sleep":
                         if(!(op.size() == 2))
                             throw new MalformedStringOfOperationsException("L'operazione sleep deve essere seguita dalla durata dello sleep");
 
                         try {
-                            threadList.add(new Thread(() -> sleep(Long.parseLong(op.get(1)))));
+                            runnableList.add(() -> sleep(Long.parseLong(op.get(1))));
                         }catch(NumberFormatException e){
                             throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
                         }
@@ -107,7 +111,15 @@ public class TemplateService {
         }
 
         log.info("eseguo operazioni concorrenti");
-        threadList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
+        ExecutorService es = Executors.newCachedThreadPool();
+        // Aggiungo i task
+        for(Runnable task : runnableList)
+            es.execute(task);
+        // Executor non accetta più task
+        es.shutdown();
+        // Aspetto che tutti i task vengano portati a termine
+        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);
+        //runnableList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
         log.info("ho eseguito le operazioni concorrenti");
 
     }
