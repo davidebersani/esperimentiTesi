@@ -38,7 +38,7 @@ public abstract class BeforeAndAfterLogging {
     private void logFailure(JoinPoint joinPoint, LoggingType loggingType, Exception e) {
         final String args = Arrays.toString(joinPoint.getArgs());
         final String methodName = joinPoint.getSignature().toShortString().replace("(..)", "()");
-        log.info("{} context:{} [method:{}, args:{}, expception:{}, message:{}]", loggingType, context , methodName, args, e.getClass().getName(), e.getMessage());
+        log.error("{} context:{} [method:{}, args:{}, expception:{}, message:{}]", loggingType, context , methodName, args, e.getClass().getName(), e.getMessage());
     }
 
     // Eseguito prima dell'esecuzione del metodo

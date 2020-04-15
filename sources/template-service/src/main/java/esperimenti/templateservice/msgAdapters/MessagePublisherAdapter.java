@@ -11,10 +11,11 @@ import org.springframework.stereotype.Component;
 public class MessagePublisherAdapter implements MessagePublisherPort {
 
     @Autowired
-    private KafkaTemplate<String, String> template;
+    private KafkaTemplate<String, String> template; // intelliJ da errore ma in realtà funziona correttamente
 
     @Override
     public void notify(String serviceToNotify, String payload) {
+        log.debug("invio al servizio: " + serviceToNotify + " il messaggio: " + payload);
         template.send(serviceToNotify, payload);
     }
 }

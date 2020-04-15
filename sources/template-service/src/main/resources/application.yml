@@ -1,5 +1,8 @@
 # application.yml 
---- 
+---
+
+#logging.level.esperimenti.templateservice: DEBUG
+
 spring: 
   application: 
     name: template
@@ -19,13 +22,12 @@ spring:
             trusted:
               packages: "*"
 
-
 eureka:
   client:
     healthcheck:
       enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
     serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/ check this url
+#     defaultZone: http://localhost:8761/eureka/ check this url
       defaultZone: http://eureka:8761/eureka/
 # leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
 # just here to provide quicker updates to Eureka for demos
@@ -33,6 +35,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     metadataMap: 
       instanceId: ${spring.application.name}:${random.value}
+
 # Porta casuale
 server: 
   port: ${PORT:${SERVER_PORT:0}}

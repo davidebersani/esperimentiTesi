@@ -21,7 +21,7 @@ public class ConcurrentConsumer implements OperationConsumer {
     public void consume(StringTokenizer st) throws MalformedStringOfOperationsException, InterruptedException {
 
         String concurrentOperations = OperationsStringParser.checkBracketsAndGetWhatsInside(st, "[", "]");
-        //log.info("operazioni concorrenti: " + concurrentOperations);
+        log.debug("operazioni concorrenti: " + concurrentOperations);
 
         StringTokenizer stConcurrentOperations = new StringTokenizer(concurrentOperations, " ");
 
@@ -40,7 +40,7 @@ public class ConcurrentConsumer implements OperationConsumer {
             operation = new ArrayList<>();
 
             operationType = stConcurrentOperations.nextToken();
-            //log.info("operationType: " + operationType);
+            log.debug("operationType: " + operationType);
             operation.add(operationType);
 
             switch (operationType) {
@@ -68,7 +68,8 @@ public class ConcurrentConsumer implements OperationConsumer {
                     throw new MalformedStringOfOperationsException("token inaspettato: " + operationType + ". In una sequenza di operazioni " +
                             "concorrenti sono ammessi solo: call, notify, exception, sleep");
             }
-            //log.info("operation: " + operation.toString());
+
+            log.debug("operation: " + operation.toString());
             listOfConcurrentOperations.add(operation);
         }
 

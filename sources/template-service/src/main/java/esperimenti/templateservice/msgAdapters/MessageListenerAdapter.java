@@ -20,7 +20,8 @@ public class MessageListenerAdapter {
     public void listen(ConsumerRecord<String, String> record) {
 
         String receivedMessage = record.value();
-        //log.info("messaggio ricevuto: " + receivedMessage);
+        log.debug("messaggio ricevuto: " + receivedMessage);
+
         try {
             operationsStringParser.parseOperations(receivedMessage);
         } catch (Exception e ) {

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @Component
-public class KafkaHealthIndicator  implements HealthIndicator {
+public class KafkaHealthIndicator implements HealthIndicator {
 
     private KafkaTemplate<String, String> kafka;
 

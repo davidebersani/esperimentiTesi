@@ -64,7 +64,7 @@ public class TemplateService {
 
         for(ArrayList<String> op: listOfConcurrentOperations){
 
-            log.info("operazione: " + op.toString());
+            log.debug("operazione: " + op.toString());
 
             // le operazioni con un numero errato di parametri vengono ignorate senza riportare eccezioni //TODO: forse riporta eccezioni
             if(op.size() > 0){
@@ -119,7 +119,6 @@ public class TemplateService {
         es.shutdown();
         // Aspetto che tutti i task vengano portati a termine
         boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);
-        //runnableList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
         log.info("ho eseguito le operazioni concorrenti");
 
     }
