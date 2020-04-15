@@ -9,8 +9,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: ${template.kafka.grouid}
-      auto-offset-reset: latest
+      group-id: ${template.kafka.groupid}
+      auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
@@ -43,7 +43,8 @@ template:
       in: ${spring.application.name}
 
 
-# Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
+# Actuator
+# use "*" to expose all endpoints, or a comma-separated list to expose selected ones
 management:
   endpoints:
     web:
