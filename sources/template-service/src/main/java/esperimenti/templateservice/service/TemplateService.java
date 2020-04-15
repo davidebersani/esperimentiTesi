@@ -101,11 +101,15 @@ public class TemplateService {
                         if(!(op.size() == 2))
                             throw new MalformedStringOfOperationsException("L'operazione sleep deve essere seguita dalla durata dello sleep");
 
+                        long sleepTime;
+
                         try {
-                            runnableList.add(() -> sleep(Long.parseLong(op.get(1))));
+                            sleepTime = Long.parseLong(op.get(1));
                         }catch(NumberFormatException e){
                             throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
                         }
+
+                        runnableList.add(() -> sleep(sleepTime));
                 }
             }
         }
