@@ -5,6 +5,7 @@ import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class TemplateService {
+
+    @Value("${spring.application.name}")
+    String service;
 
     @Autowired
     private TemplateServicePort templateServicePort;
@@ -47,7 +51,7 @@ public class TemplateService {
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
     public void generateException(String exceptionMessage) throws GeneratedException {
-        throw new GeneratedException(exceptionMessage); //TODO: aggiungere nome del servizio che genera l'eccezione
+        throw new GeneratedException("Exception from service " + service + ": " +   exceptionMessage);
     }
 
     /**
@@ -118,8 +122,8 @@ public class TemplateService {
         // Executor non accetta più task
         es.shutdown();
         // Aspetto che tutti i task vengano portati a termine
-        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);
-        //runnableList.parallelStream().forEach(Thread::start); //TODO: aspettare che terminino tutti i threads prima di fare return
+        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);   // TODO: Controllare se i thread hanno terminato con successo o meno.
+        //runnableList.parallelStream().forEach(Thread::start);
         log.info("ho eseguito le operazioni concorrenti");
 
     }

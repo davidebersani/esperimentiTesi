@@ -2,15 +2,15 @@ version: '3'
 services:
 
  # Prometheus server
- prometheus:
-   build:
-     context: ./prometheus-server
-   container_name: prometheus
-   ports:
+  prometheus:
+    build:
+      context: ./prometheus-server
+    container_name: prometheus
+    ports:
      - "9090:9090"
 
  # Grafana
- grafana:
+  grafana:
    build:
      context: ./grafana
    container_name: grafana

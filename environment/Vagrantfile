@@ -43,6 +43,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         node.vm.provision :shell, :inline => 'apt update'
         # Installazione Java
         node.vm.provision :shell, :inline => 'apt install -y openjdk-8-jdk'
+        # Installazione jq (dipendenza)
+        node.vm.provision :shell, :inline => 'apt install -y jq'
+        # Proprietà necessaria per eseguire Elastic search
+        node.vm.provision :shell, :inline => 'echo "vm.max_map_count=655360" | sudo tee -a /etc/sysctl.conf'
+
         # Installazione Gradle
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-gradle.sh"
 
