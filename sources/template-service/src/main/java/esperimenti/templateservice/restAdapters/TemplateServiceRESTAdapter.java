@@ -28,35 +28,31 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
 
         ServiceInstance instance = loadBalancer.choose(serviceToCall);
 
-        if(instance!=null) {
-
-            StringBuilder sb = new StringBuilder();
-            sb.append(instance.getUri().toString());
-            sb.append("/prosegui");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.TEXT_PLAIN);
-
-            HttpEntity<String> request = new HttpEntity<String>(payload, headers);
-
-            //log.info("Eseguo chiamata al servizio " + serviceToCall);
-
-            RestTemplate restTemplate = new RestTemplate();
-
-            try {
-                ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
-                //log.info("Risposta chiamata: " + responseEntityStr);
-            }catch (HttpServerErrorException.InternalServerError e) {
-                log.info("errore del server con msg: " + getMessageOfHttpErrorException(e));
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getMessageOfHttpErrorException(e));
-            }catch (HttpClientErrorException.BadRequest e) {
-                log.info("errore del client con msg: " + getMessageOfHttpErrorException(e));
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, getMessageOfHttpErrorException(e));
-            }
-        }else {
-            //log.info("servizio " + serviceToCall + " non trovato");
+        if(instance==null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(instance.getUri().toString());
+        sb.append("/prosegui");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+
+        HttpEntity<String> request = new HttpEntity<>(payload, headers);
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            log.debug("Eseguo chiamata POST al servizio " + serviceToCall);
+            ResponseEntity<String> responseEntityStr = restTemplate.postForEntity(sb.toString(), request, String.class);
+            log.debug("Risposta chiamata: " + responseEntityStr);
+        }catch (HttpServerErrorException.InternalServerError e) {
+            log.debug("errore del server con msg: " + getMessageOfHttpErrorException(e));
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, getMessageOfHttpErrorException(e));
+        }catch (HttpClientErrorException.BadRequest e) {
+            log.debug("errore del client con msg: " + getMessageOfHttpErrorException(e));
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, getMessageOfHttpErrorException(e));
         }
+
     }
 
     private String getMessageOfHttpErrorException(HttpStatusCodeException e) {
@@ -67,7 +63,7 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
         try {
             messageOfHttpErrorException = mapper.readValue(e.getResponseBodyAsString(), CustomHttpErrorException.class).getMessage();
         } catch (IOException ex) {
-            log.info("IOException: " + ex.toString());
+            log.debug("IOException: " + ex.toString());
             messageOfHttpErrorException = "no message retrieved";
         }
 

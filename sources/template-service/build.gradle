@@ -4,7 +4,7 @@ plugins {
 	id 'java'
 }
 
-group = 'davide.bersani'
+group = 'esperimenti.templateservice'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
@@ -27,8 +27,6 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
 	implementation 'org.springframework.kafka:spring-kafka'
-	implementation 'org.javatuples:javatuples:1.2'
-
 
 	compileOnly "org.springframework.boot:spring-boot-starter-aop"
 	compileOnly 'org.projectlombok:lombok'

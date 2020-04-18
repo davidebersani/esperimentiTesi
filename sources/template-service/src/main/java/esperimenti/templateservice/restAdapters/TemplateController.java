@@ -19,7 +19,7 @@ public class TemplateController {
 
 	@PostMapping(value = "/prosegui", consumes = "text/plain")
 	public void prosegui(@RequestBody String operations){
-		//log.info("stringa ricevuta: " + operations);
+		log.debug("stringa ricevuta: " + operations);
 		try{
 			operationsStringParser.parseOperations(operations);
 		}catch (MalformedStringOfOperationsException e) {

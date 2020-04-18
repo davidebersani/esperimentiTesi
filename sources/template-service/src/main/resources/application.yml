@@ -1,5 +1,8 @@
 # application.yml 
---- 
+---
+
+#logging.level.esperimenti.templateservice: DEBUG
+
 spring: 
   application: 
     name: template
@@ -9,8 +12,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: ${template.kafka.grouid}
-      auto-offset-reset: latest
+      group-id: ${template.kafka.groupid}
+      auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
@@ -19,13 +22,12 @@ spring:
             trusted:
               packages: "*"
 
-
 eureka:
   client:
     healthcheck:
       enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
     serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/ check this url
+#     defaultZone: http://localhost:8761/eureka/ check this url
       defaultZone: http://eureka:8761/eureka/
 # leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
 # just here to provide quicker updates to Eureka for demos
@@ -33,6 +35,7 @@ eureka:
     leaseRenewalIntervalInSeconds: 10
     metadataMap: 
       instanceId: ${spring.application.name}:${random.value}
+
 # Porta casuale
 server: 
   port: ${PORT:${SERVER_PORT:0}}
@@ -53,6 +56,6 @@ management:
         include: health,info,prometheus
   endpoint:
     health:
-      show-details: always    # Espone dettagli sul health endpoint 
+      show-details: always    # Espone dettagli sul health endpoint
 
 
