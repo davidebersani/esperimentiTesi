@@ -5,6 +5,7 @@ import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ import java.util.concurrent.TimeUnit;
 @Service
 @Slf4j
 public class TemplateService {
+
+    @Value("${spring.application.name}")
+    String service;
 
     @Autowired
     private TemplateServicePort templateServicePort;
@@ -47,7 +51,7 @@ public class TemplateService {
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
     public void generateException(String exceptionMessage) throws GeneratedException {
-        throw new GeneratedException(exceptionMessage); //TODO: aggiungere nome del servizio che genera l'eccezione
+        throw new GeneratedException("Exception from service " + service + ": " +   exceptionMessage);
     }
 
     /**

@@ -1,0 +1,8 @@
+Se non si ha a disposizione un template da cui partire:
+1) entrare su Kibana
+2) Creare un index pattern corrispondente a quello desiderato, impostare come index pattern id "logging-all"
+3) Scaricare il template con questo comando:
+
+    curl -H 'Content-Type: application/json; charset=utf-8' -H 'kbn-xsrf: true' -XGET 'http://localhost:5601/api/saved_objects/index-pattern/logging-all' > template.json
+
+4) Rimuovere gli attributi id, type, updated_at, and version.
