@@ -2,7 +2,18 @@
 --- 
 spring: 
   application: 
-    name: zuul
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+  sleuth:
+    sampler:
+      probability: 100
+  zipkin:
+    baseUrl: http://zipkin:9411/
     
 eureka: 
   client: 
@@ -11,18 +22,18 @@ eureka:
       defaultZone: http://eureka:8761/eureka/
 # leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
 # just here to provide quicker updates to Eureka for demos
-  instance: 
+  instance:
     leaseRenewalIntervalInSeconds: 10
-    metadataMap: 
+    metadataMap:
       instanceId: ${spring.application.name}:${random.value}
 
 server:
   port: 8080
 
-ribbon:
-  ConnectTimeout:  10000
-  ReadTimeout:  10000
-  eager-load:
-    enabled: true
-  eureka:
-    enabled: true
+#ribbon:
+#  ConnectTimeout:  10000
+#  ReadTimeout:  10000
+#  eager-load:
+#    enabled: true
+#  eureka:
+#    enabled: true

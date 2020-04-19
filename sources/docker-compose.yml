@@ -1,26 +1,26 @@
 version: '3'
 services:
 
- # Prometheus server
-  prometheus:
-    build:
-      context: ./prometheus-server
-    container_name: prometheus
-    ports:
-     - "9090:9090"
-
- # Grafana
-  grafana:
-   build:
-     context: ./grafana
-   container_name: grafana
-   ports:
-     - "3000:3000"
-   depends_on:
-     - "prometheus"
-   volumes:
-     - ./grafana/dashboards:/var/lib/grafana/dashboards
-     - ./grafana/provisioning/:/etc/grafana/provisioning/
+#  # Prometheus server
+#  prometheus:
+#    build:
+#      context: ./prometheus-server
+#    container_name: prometheus
+#    ports:
+#      - "9090:9090"
+#
+#  # Grafana
+#  grafana:
+#    build:
+#      context: ./grafana
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - "prometheus"
+#    volumes:
+#      - ./grafana/dashboards:/var/lib/grafana/dashboards
+#      - ./grafana/provisioning/:/etc/grafana/provisioning/
 
   # Eureka
   eureka:
@@ -39,12 +39,12 @@ services:
       - "eureka"
       - "kafka"
       - "fluentd"
+      - "zipkin"
     logging:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
         tag: a-service.allLog
-
 
   # B
   b-service:
@@ -57,38 +57,57 @@ services:
       - "eureka"
       - "kafka"
       - "fluentd"
+      - "zipkin"
     logging:
       driver: "fluentd"
       options:
         fluentd-address: localhost:24224
         tag: b-service.allLog
 
- # C
- c-service:
-   build:
-     context: ./template-service
-   container_name: c-service
-   environment:
-     - spring.application.name=c
-   depends_on:
-     - "eureka"
-     - "kafka"
-     - "fluentd"
-   logging:
-     driver: "fluentd"
-     options:
-       fluentd-address: localhost:24224
-       tag: c-service.allLog
-
-  # Zuul
-  zuul:
+  # C
+  c-service:
     build:
-      context: ./zuul-gateway
-    container_name: zuul
+      context: ./template-service
+    container_name: c-service
+    environment:
+      - spring.application.name=c
+    depends_on:
+      - "eureka"
+      - "kafka"
+      - "fluentd"
+      - "zipkin"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: c-service.allLog
+
+#  # Zuul
+#  zuul:
+#    build:
+#      context: ./zuul-gateway
+#    container_name: zuul
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - "eureka"
+
+  # SpringCloud Gateway
+  gateway:
+    build:
+      context: ./spring-cloud-gateway
+    container_name: gateway
     ports:
       - "8080:8080"
     depends_on:
       - "eureka"
+      - "zipkin"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
 
   #Zookeeper
   zookeeper:
@@ -111,7 +130,9 @@ services:
       KAFKA_CREATE_TOPICS: "a:1:1,b:1:1,c:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-# ELASTIC STACK (EFK)
+
+  # ELASTIC STACK (EFK)
+
   fluentd:
     container_name: fluentd
     build: ./fluentd
@@ -122,7 +143,6 @@ services:
       - "24224:24224/udp"
     depends_on:
       - "es01"
-
 
   es01:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
