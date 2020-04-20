@@ -56,8 +56,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # Installazione Docker Compose
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-docker-compose.sh"
-
-        node.vm.provision :shell, 
+	
+	# Impostazione TimeZone di Roma
+	node.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Rome /etc/localtime"
+        
+	node.vm.provision :shell, 
             inline: "echo  'configurazione nodo workstation completata'"
     end
 end
