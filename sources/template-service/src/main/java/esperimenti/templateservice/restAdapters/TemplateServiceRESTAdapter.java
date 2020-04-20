@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -17,11 +19,20 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 
 @Component
+@Configuration
 @Slf4j
 public class TemplateServiceRESTAdapter implements TemplateServicePort {
 
     @Autowired
     private LoadBalancerClient loadBalancer;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
 
     @Override
     public void makeRESTcallToService(String serviceToCall, String payload) {
@@ -39,7 +50,6 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
         headers.setContentType(MediaType.TEXT_PLAIN);
 
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
-        RestTemplate restTemplate = new RestTemplate();
 
         try {
             log.debug("Eseguo chiamata POST al servizio " + serviceToCall);

@@ -21,6 +21,11 @@ spring:
           json:
             trusted:
               packages: "*"
+  sleuth:
+    sampler:
+      probability: 100
+  zipkin:
+    baseUrl: http://zipkin:9411/
 
 eureka:
   client:
