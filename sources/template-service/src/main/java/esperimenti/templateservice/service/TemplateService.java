@@ -1,5 +1,6 @@
 package esperimenti.templateservice.service;
 
+import esperimenti.templateservice.domain.ConcurrentExecutionException;
 import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
@@ -9,10 +10,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Service
 @Slf4j
@@ -26,6 +26,9 @@ public class TemplateService {
 
     @Autowired
     private MessagePublisherPort publisher;
+
+    @Autowired
+    private ExecutorService executor;
 
     @Timed(value="template.service.operations", description = "timer per call", extraTags = {"operation" , "call"})
     public void callService(String serviceToCall, String payload) {
@@ -62,7 +65,7 @@ public class TemplateService {
      *                                   2: payload (per call/notify)
      */
     @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
-    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException {
+    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException, ConcurrentExecutionException {
 
         List<Runnable> runnableList = new ArrayList<>();
 
@@ -119,14 +122,23 @@ public class TemplateService {
         }
 
         log.info("eseguo operazioni concorrenti");
-        ExecutorService es = Executors.newCachedThreadPool();
+        List<Future> taskResults = new LinkedList<>();
         // Aggiungo i task
-        for(Runnable task : runnableList)
-            es.execute(task);
+        for(Runnable task : runnableList) {
+            taskResults.add(executor.submit(task));
+        }
+
         // Executor non accetta più task
-        es.shutdown();
-        // Aspetto che tutti i task vengano portati a termine
-        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);   // TODO: Controllare se i thread hanno terminato con successo o meno.
+        executor.shutdown();
+        // Controllo che l'esecuzione di tutti i thread sia andata a buon fine
+        for(Future f : taskResults) {
+            try {
+                f.get();
+            } catch (ExecutionException e) {
+                Exception exception = (Exception) e.getCause();
+                throw new ConcurrentExecutionException("Si è verificata un'eccezione nell'esecuzione di un thread.", exception);
+            }
+        }
         //runnableList.parallelStream().forEach(Thread::start);
         log.info("ho eseguito le operazioni concorrenti");
 
