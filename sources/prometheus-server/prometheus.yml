@@ -17,16 +17,16 @@ scrape_configs:
     metrics_path: '/a/actuator/prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['zuul:8080']
+      - targets: ['gateway:8080']
 
   - job_name: 'b-actuator'
     metrics_path: '/b/actuator/prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['zuul:8080']
+      - targets: ['gateway:8080']
 
   - job_name: 'c-actuator'
     metrics_path: '/c/actuator/prometheus'
     scrape_interval: 5s
     static_configs:
-      - targets: ['zuul:8080']
+      - targets: ['gateway:8080']
