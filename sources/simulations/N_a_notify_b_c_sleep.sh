@@ -3,7 +3,7 @@
 
 echo "Eseguo chiamate in modo sincrono."
 
-NUM=50  # Numero di chiamate da effettuare
+NUM=30  # Numero di chiamate da effettuare
 SLEEP_B=3000    # Millisecondi di sleep per il servizio B
 SLEEP_C=1000    # Millisecondi di sleep per il servizio C
 
