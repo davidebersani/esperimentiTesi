@@ -126,7 +126,8 @@ public class TemplateService {
         // Executor non accetta più task
         es.shutdown();
         // Aspetto che tutti i task vengano portati a termine
-        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);
+        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);   // TODO: Controllare se i thread hanno terminato con successo o meno.
+        //runnableList.parallelStream().forEach(Thread::start);
         log.info("ho eseguito le operazioni concorrenti");
 
     }

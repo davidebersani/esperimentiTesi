@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Script che simula un determinato comportamento di un client, utile per verifiacare il comportamento del sistema, per esempio utilizzando grafana.
 # In particolare, questo script esegue delle semplici chiamate rest ai servizi A,B e C. Le chiamate vengono lanciate senza aspettare che le precedenti terminino.
 # Le prime chiamate sono senza ulteriori istruzioni all'interno. Le successive introducono un ritardo. per ciascuna chiamata.
