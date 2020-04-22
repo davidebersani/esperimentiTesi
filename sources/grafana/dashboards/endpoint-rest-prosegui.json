@@ -36,6 +36,7 @@
       },
       "hiddenSeries": false,
       "id": 4,
+      "interval": "5s",
       "legend": {
         "avg": false,
         "current": false,
@@ -61,9 +62,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (uri, job) (rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[30s]))",
+          "expr": "sum by (uri, job) (rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[10s]))",
           "interval": "",
-          "legendFormat": "{{job}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -87,6 +88,7 @@
       },
       "yaxes": [
         {
+          "$$hashKey": "object:211",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -95,6 +97,7 @@
           "show": true
         },
         {
+          "$$hashKey": "object:212",
           "format": "short",
           "label": null,
           "logBase": 1,
@@ -124,6 +127,7 @@
       },
       "hiddenSeries": false,
       "id": 5,
+      "interval": "5s",
       "legend": {
         "avg": false,
         "current": false,
@@ -149,7 +153,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_count{uri=\"/prosegui\", status=~\"[4|5].*\"}[30s])",
+          "expr": "rate(http_server_requests_seconds_count{uri=\"/prosegui\", status=~\"[4|5].*\"}[10s])",
           "interval": "",
           "legendFormat": "{{job}} - status: {{status}}",
           "refId": "A"
@@ -212,7 +216,7 @@
       },
       "hiddenSeries": false,
       "id": 2,
-      "interval": "",
+      "interval": "5s",
       "legend": {
         "avg": false,
         "current": false,
@@ -238,7 +242,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(http_server_requests_seconds_sum{uri=\"/prosegui\"}[30s])/rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[30s])  ",
+          "expr": "rate(http_server_requests_seconds_sum{uri=\"/prosegui\"}[10s])/rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[10s])  ",
           "interval": "",
           "legendFormat": "{{job}} - status: {{status}}",
           "refId": "A"
@@ -317,5 +321,5 @@
   "variables": {
     "list": []
   },
-  "version": 2
+  "version": 1
 }
