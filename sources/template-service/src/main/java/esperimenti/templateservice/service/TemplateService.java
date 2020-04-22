@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class TemplateService {
+public class TemplateService /*implements CommandLineRunner*/ {
 
     @Value("${spring.application.name}")
     String service;
@@ -27,17 +27,18 @@ public class TemplateService {
     @Autowired
     private MessagePublisherPort publisher;
 
-    @Timed(value="template.service.operations", description = "timer per call", extraTags = {"operation" , "call"})
+//    @Autowired
+//    MeterRegistry meterRegistry;
+
+    @Timed(value="template.service.operations", extraTags = {"operation" , "call"})
     public void callService(String serviceToCall, String payload) {
         templateServicePort.makeRESTcallToService(serviceToCall, payload);
     }
-
 
     @Timed(value="template.service.operations", extraTags = {"operation" , "notify"})
     public void notifyService(String serviceToNotify, String payload) {
         publisher.notify(serviceToNotify, payload);
     }
-
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "sleep"})
     public void sleep(long sleepTime) {
@@ -47,7 +48,6 @@ public class TemplateService {
             log.info("sono stato interrotto mentre dormivo" + e.toString()); //TODO: non so bene come funziona
         }
     }
-
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
     public void generateException(String exceptionMessage) throws GeneratedException {
@@ -131,4 +131,19 @@ public class TemplateService {
         log.info("ho eseguito le operazioni concorrenti");
 
     }
+
+    /*
+    //all'avvio dell'applicazione Spring devo inizializzare queste metriche a 0
+    @Override
+    public void run(String... args) throws Exception {
+        log.info("inizializzo tutto a 0");
+        meterRegistry.timer("template.service.operations", "class", "esperimenti.templateservice.service.TemplateService",
+            "exception", "none", "method", "notifyService", "operation", "notify");
+        //meterRegistry.timer("template.service.operations","operation" , "call");
+        //meterRegistry.timer("template.service.operations","operation" , "notify");
+//        meterRegistry.timer("template.service.operations","operation" , "sleep");
+//        meterRegistry.timer("template.service.operations","operation" , "exception");
+//        meterRegistry.timer("template.service.operations","operation" , "concurrent");
+    }
+    */
 }
