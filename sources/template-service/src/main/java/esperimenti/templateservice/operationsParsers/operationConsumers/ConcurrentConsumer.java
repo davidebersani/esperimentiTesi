@@ -1,5 +1,6 @@
 package esperimenti.templateservice.operationsParsers.operationConsumers;
 
+import esperimenti.templateservice.domain.ConcurrentExecutionException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.operationsParsers.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
@@ -18,7 +19,7 @@ public class ConcurrentConsumer implements OperationConsumer {
     TemplateService templateService;
 
     @Override
-    public void consume(StringTokenizer st) throws MalformedStringOfOperationsException, InterruptedException {
+    public void consume(StringTokenizer st) throws MalformedStringOfOperationsException, InterruptedException, ConcurrentExecutionException {
 
         String concurrentOperations = OperationsStringParser.checkBracketsAndGetWhatsInside(st, "[", "]");
         log.debug("operazioni concorrenti: " + concurrentOperations);

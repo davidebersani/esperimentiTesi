@@ -1,5 +1,6 @@
 package esperimenti.templateservice.service;
 
+import esperimenti.templateservice.domain.ConcurrentExecutionException;
 import esperimenti.templateservice.domain.GeneratedException;
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
@@ -9,14 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 @Service
 @Slf4j
-public class TemplateService /*implements CommandLineRunner*/ {
+public class TemplateService {
 
     @Value("${spring.application.name}")
     String service;
@@ -27,18 +27,20 @@ public class TemplateService /*implements CommandLineRunner*/ {
     @Autowired
     private MessagePublisherPort publisher;
 
-//    @Autowired
-//    MeterRegistry meterRegistry;
+    @Autowired
+    private ExecutorService executor;
 
-    @Timed(value="template.service.operations", extraTags = {"operation" , "call"})
+    @Timed(value="template.service.operations", description = "timer per call", extraTags = {"operation" , "call"})
     public void callService(String serviceToCall, String payload) {
         templateServicePort.makeRESTcallToService(serviceToCall, payload);
     }
+
 
     @Timed(value="template.service.operations", extraTags = {"operation" , "notify"})
     public void notifyService(String serviceToNotify, String payload) {
         publisher.notify(serviceToNotify, payload);
     }
+
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "sleep"})
     public void sleep(long sleepTime) {
@@ -48,6 +50,7 @@ public class TemplateService /*implements CommandLineRunner*/ {
             log.info("sono stato interrotto mentre dormivo" + e.toString()); //TODO: non so bene come funziona
         }
     }
+
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
     public void generateException(String exceptionMessage) throws GeneratedException {
@@ -62,7 +65,7 @@ public class TemplateService /*implements CommandLineRunner*/ {
      *                                   2: payload (per call/notify)
      */
     @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
-    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException {
+    public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException, ConcurrentExecutionException {
 
         List<Runnable> runnableList = new ArrayList<>();
 
@@ -119,31 +122,25 @@ public class TemplateService /*implements CommandLineRunner*/ {
         }
 
         log.info("eseguo operazioni concorrenti");
-        ExecutorService es = Executors.newCachedThreadPool();
+        List<Future> taskResults = new LinkedList<>();
         // Aggiungo i task
-        for(Runnable task : runnableList)
-            es.execute(task);
+        for(Runnable task : runnableList) {
+            taskResults.add(executor.submit(task));
+        }
+
         // Executor non accetta più task
-        es.shutdown();
-        // Aspetto che tutti i task vengano portati a termine
-        boolean finished = es.awaitTermination(10, TimeUnit.MINUTES);   // TODO: Controllare se i thread hanno terminato con successo o meno.
+        executor.shutdown();
+        // Controllo che l'esecuzione di tutti i thread sia andata a buon fine
+        for(Future f : taskResults) {
+            try {
+                f.get();
+            } catch (ExecutionException e) {
+                Exception exception = (Exception) e.getCause();
+                throw new ConcurrentExecutionException("Si è verificata un'eccezione nell'esecuzione di un thread.", exception);
+            }
+        }
         //runnableList.parallelStream().forEach(Thread::start);
         log.info("ho eseguito le operazioni concorrenti");
 
     }
-
-    /*
-    //all'avvio dell'applicazione Spring devo inizializzare queste metriche a 0
-    @Override
-    public void run(String... args) throws Exception {
-        log.info("inizializzo tutto a 0");
-        meterRegistry.timer("template.service.operations", "class", "esperimenti.templateservice.service.TemplateService",
-            "exception", "none", "method", "notifyService", "operation", "notify");
-        //meterRegistry.timer("template.service.operations","operation" , "call");
-        //meterRegistry.timer("template.service.operations","operation" , "notify");
-//        meterRegistry.timer("template.service.operations","operation" , "sleep");
-//        meterRegistry.timer("template.service.operations","operation" , "exception");
-//        meterRegistry.timer("template.service.operations","operation" , "concurrent");
-    }
-    */
 }

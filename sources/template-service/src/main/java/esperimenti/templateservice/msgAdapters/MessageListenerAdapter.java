@@ -2,6 +2,7 @@ package esperimenti.templateservice.msgAdapters;
 
 import esperimenti.templateservice.operationsParsers.OperationsStringParser;
 import esperimenti.templateservice.service.TemplateService;
+import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class MessageListenerAdapter {
     @Autowired
     private OperationsStringParser operationsStringParser;
 
+    @Timed(value="template.msg", description = "timer per processamento messaggi", extraTags = {"operation" , "listen"})
     @KafkaListener(topics = "${template.kafka.channel.in}", groupId="${template.kafka.groupid}")
     public void listen(ConsumerRecord<String, String> record) {
 
