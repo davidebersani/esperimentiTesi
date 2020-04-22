@@ -1,26 +1,26 @@
 version: '3'
 services:
 
-#  # Prometheus server
-#  prometheus:
-#    build:
-#      context: ./prometheus-server
-#    container_name: prometheus
-#    ports:
-#      - "9090:9090"
-#
-#  # Grafana
-#  grafana:
-#    build:
-#      context: ./grafana
-#    container_name: grafana
-#    ports:
-#      - "3000:3000"
-#    depends_on:
-#      - "prometheus"
-#    volumes:
-#      - ./grafana/dashboards:/var/lib/grafana/dashboards
-#      - ./grafana/provisioning/:/etc/grafana/provisioning/
+ # Prometheus server
+  prometheus:
+    build:
+      context: ./prometheus-server
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+
+ # Grafana
+  grafana:
+    build:
+      context: ./grafana
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - "prometheus"
+    volumes:
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
 
   # Eureka
   eureka:
@@ -64,18 +64,18 @@ services:
         fluentd-address: localhost:24224
         tag: b-service.allLog
 
-  # C
+   # C
   c-service:
     build:
       context: ./template-service
     container_name: c-service
     environment:
-      - spring.application.name=c
+     - spring.application.name=c
     depends_on:
-      - "eureka"
-      - "kafka"
-      - "fluentd"
-      - "zipkin"
+     - "eureka"
+     - "kafka"
+     - "fluentd"
+     - "zipkin"
     logging:
       driver: "fluentd"
       options:
