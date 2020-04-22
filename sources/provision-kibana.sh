@@ -4,4 +4,4 @@
 # di fluentd. Quindi è da tenere aggiornata.
 
 # Pubblico l'index pattern
-curl -H 'Content-Type: application/json; chartset=utf-8' -H 'kbn-xsrf: true' -X POST 'http://localhost:5601/api/saved_objects/index-pattern/logging-all?overwrite=true' -d "@./template.json"
+curl -H 'Content-Type: application/json; chartset=utf-8' -H 'kbn-xsrf: true' -X POST 'http://localhost:5601/api/saved_objects/index-pattern/logging-all?overwrite=true' -d "@./kibana/template.json"
