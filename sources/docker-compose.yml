@@ -1,7 +1,7 @@
 version: '3'
 services:
 
- # Prometheus server
+  # Prometheus server
   prometheus:
     build:
       context: ./prometheus-server
@@ -9,7 +9,7 @@ services:
     ports:
       - "9090:9090"
 
- # Grafana
+  # Grafana
   grafana:
     build:
       context: ./grafana
@@ -64,18 +64,18 @@ services:
         fluentd-address: localhost:24224
         tag: b-service.allLog
 
-   # C
+  # C
   c-service:
     build:
       context: ./template-service
     container_name: c-service
     environment:
-     - spring.application.name=c
+      - spring.application.name=c
     depends_on:
-     - "eureka"
-     - "kafka"
-     - "fluentd"
-     - "zipkin"
+      - "eureka"
+      - "kafka"
+      - "fluentd"
+      - "zipkin"
     logging:
       driver: "fluentd"
       options:
