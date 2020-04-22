@@ -38,6 +38,13 @@ services:
     depends_on:
       - "eureka"
       - "kafka"
+      - "fluentd"
+      - "zipkin"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: a-service.allLog
 
   # B
   b-service:
@@ -49,6 +56,13 @@ services:
     depends_on:
       - "eureka"
       - "kafka"
+      - "fluentd"
+      - "zipkin"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: b-service.allLog
 
   # C
   c-service:
@@ -60,16 +74,40 @@ services:
     depends_on:
       - "eureka"
       - "kafka"
+      - "fluentd"
+      - "zipkin"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: c-service.allLog
 
-  # Zuul
-  zuul:
+#  # Zuul
+#  zuul:
+#    build:
+#      context: ./zuul-gateway
+#    container_name: zuul
+#    ports:
+#      - "8080:8080"
+#    depends_on:
+#      - "eureka"
+
+  # SpringCloud Gateway
+  gateway:
     build:
-      context: ./zuul-gateway
-    container_name: zuul
+      context: ./spring-cloud-gateway
+    container_name: gateway
     ports:
       - "8080:8080"
     depends_on:
       - "eureka"
+      - "zipkin"
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
 
   #Zookeeper
   zookeeper:
@@ -89,6 +127,52 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: ${DOCKER_HOST_IP:-10.11.1.111}
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "a:4:1,b:4:1,c:4:1"
+      KAFKA_CREATE_TOPICS: "a:1:1,b:1:1,c:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  # ELASTIC STACK (EFK)
+
+  fluentd:
+    container_name: fluentd
+    build: ./fluentd
+    volumes:
+      - ./fluentd/conf:/fluentd/etc
+    ports:
+      - "24224:24224"
+      - "24224:24224/udp"
+    depends_on:
+      - "es01"
+
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.2
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+
+  kib01:
+    image: docker.elastic.co/kibana/kibana:7.6.2
+    container_name: kib01
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://es01:9200
+      ELASTICSEARCH_HOSTS: http://es01:9200
+    depends_on:
+      - "es01"
+
+volumes:
+  data01:
+    driver: local

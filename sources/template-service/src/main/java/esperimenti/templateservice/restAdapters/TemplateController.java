@@ -2,8 +2,10 @@ package esperimenti.templateservice.restAdapters;
 
 import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
 import esperimenti.templateservice.operationsParsers.OperationsStringParser;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,7 @@ public class TemplateController {
 
 	@PostMapping(value = "/prosegui", consumes = "text/plain")
 	public void prosegui(@RequestBody String operations){
-		//log.info("stringa ricevuta: " + operations);
+		log.debug("stringa ricevuta: " + operations);
 		try{
 			operationsStringParser.parseOperations(operations);
 		}catch (MalformedStringOfOperationsException e) {
@@ -33,5 +35,4 @@ public class TemplateController {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 	}
-
 }

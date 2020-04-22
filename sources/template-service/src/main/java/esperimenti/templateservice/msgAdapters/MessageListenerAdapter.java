@@ -13,23 +13,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MessageListenerAdapter {
 
-    @Value("${template.kafka.channel.in}")
-    private String channel;
-
-    @Value("${template.kafka.groupid}")
-    private String groupId;
-
     @Autowired
-    OperationsStringParser operationsStringParser;
-
-    @Autowired
-    private TemplateService templateService;
+    private OperationsStringParser operationsStringParser;
 
     @KafkaListener(topics = "${template.kafka.channel.in}", groupId="${template.kafka.groupid}")
     public void listen(ConsumerRecord<String, String> record) {
 
         String receivedMessage = record.value();
-        //log.info("messaggio ricevuto: " + receivedMessage);
+        log.debug("messaggio ricevuto: " + receivedMessage);
+
         try {
             operationsStringParser.parseOperations(receivedMessage);
         } catch (Exception e ) {

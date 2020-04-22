@@ -1,9 +1,11 @@
 rootProject.name = 'esperimenti-tesi'
 
 include 'template-service'
-include 'zuul-gateway'
+//include 'zuul-gateway'
+include 'spring-cloud-gateway'
 include 'eureka-server'
 
 project(':template-service').name = 'template'
-project(':zuul-gateway').name = 'zuul'
+project(':spring-cloud-gateway').name = 'gateway'
+//project(':zuul-gateway').name = 'zuul'
 project(':eureka-server').name = 'eureka'

@@ -6,3 +6,9 @@ spring:
 
 server:
   port: 8761
+
+#in questo modo eureka non si registra a se stesso come client ed evitiamo le eccezioni al boot (però non si vede la dashboard why?)
+#eureka:
+#  client:
+#    registerWithEureka: false
+#    fetchRegistry: false

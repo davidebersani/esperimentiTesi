@@ -6,7 +6,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Ubuntu 18.04 Virtualbox - credenziali vagrant/vagrant
     config.vm.box = "bento/ubuntu-18.04"
     
-
     # Condivido la directory dei sorgenti con la vm guest
     config.vm.synced_folder "../sources/", "/home/vagrant/sources", :mount_options => ["dmode=777", "fmode=777"]
     
@@ -26,8 +25,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # Impostazioni Virtualbox
         node.vm.provider "virtualbox" do |v| 
-            v.memory = 4096 
-            v.cpus = 4
+            v.memory = 8192 
+            v.cpus = 8
         end 
 
         node.vm.network "forwarded_port", guest: 22, host: 2222, id: 'ssh', auto_correct: true 
@@ -36,11 +35,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         node.vm.network "forwarded_port", guest: 9090, host: 9090, id: 'prometheus', auto_correct: true
 	node.vm.network "forwarded_port", guest: 3000, host: 3000, id: 'grafana', auto_correct: true
         node.vm.network "forwarded_port", guest: 9092, host: 9092, id: 'kafka', auto_correct: true
-        
+        node.vm.network "forwarded_port", guest: 9200, host: 9200, id: 'elasticsearch', auto_correct: true
+        node.vm.network "forwarded_port", guest: 5601, host: 5601, id: 'kibana', auto_correct: true
+	node.vm.network "forwarded_port", guest: 9411, host: 9411, id: 'zipkin', auto_correct: true
+
 	# Provisioning
         node.vm.provision :shell, :inline => 'apt update'
         # Installazione Java
         node.vm.provision :shell, :inline => 'apt install -y openjdk-8-jdk'
+        # Installazione jq (dipendenza)
+        node.vm.provision :shell, :inline => 'apt install -y jq'
+        # Proprietà necessaria per eseguire Elastic search
+        node.vm.provision :shell, :inline => '(echo "vm.max_map_count=655360" | sudo tee -a /etc/sysctl.conf) && sudo sysctl -p'
+
         # Installazione Gradle
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-gradle.sh"
 
@@ -49,8 +56,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
         # Installazione Docker Compose
         node.vm.provision :shell, :inline => "/home/vagrant/provisioning/setup-docker-compose.sh"
-
-        node.vm.provision :shell, 
+	
+	# Impostazione TimeZone di Roma
+	node.vm.provision :shell, :inline => "sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Europe/Rome /etc/localtime"
+        
+	node.vm.provision :shell, 
             inline: "echo  'configurazione nodo workstation completata'"
     end
 end
