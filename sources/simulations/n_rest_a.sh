@@ -1,7 +1,9 @@
 #!/bin/bash
-# Vengono effettuate N chiamate REST consecutive al servizio A
+# Scenario:
+# vengono effettuate N chiamate REST consecutive al servizio A.
 
-N=50
+N=50 # Numero di chiamate da effettuare
+
 echo "Eseguo $N chiamate REST consecutive al servizio A"
 
 for (( i=0; i<$N; i++ ))
