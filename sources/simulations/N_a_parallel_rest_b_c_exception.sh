@@ -4,7 +4,7 @@
 
 echo "Eseguo chiamate in modo sincrono."
 
-NUM=10  # Numero di chiamate da effettuare
+NUM=1  # Numero di chiamate da effettuare
 PROB_FAILURE_B=20   # Probabilità di fallimento per B [0-100]
 PROB_FAILURE_C=20   # Probabilità di fallimento per C [0-100]
 
@@ -16,26 +16,26 @@ do
   echo "Chiamata $(($i+1))"
   rand=$((RANDOM%100+1))
   #echo "$RAND"
-  if (( rand > PROB_FAILURE_B ))
+  if (( rand < PROB_FAILURE_B ))
   then
-    # Non inserisco eccezione
+    # Inserisco eccezione
     echo
     payload_b="exception \"Fallimento!\";"
     echo "B fallisce."
     fail=1
   else
-    # Inserisco eccezione
+    # Non inserisco eccezione
     payload_b=" "
   fi
   rand=$((RANDOM%100+1))
-  if (( rand > PROB_FAILURE_C ))
+  if (( rand < PROB_FAILURE_C ))
   then
-    # Non inserisco eccezione
+    # Inserisco eccezione
     payload_c="exception \"Fallimento!\";"
     echo "C fallisce."
     fail=1
   else
-    # Inserisco eccezione
+    # Non inserisco eccezione
     payload_c=" "
   fi
 
