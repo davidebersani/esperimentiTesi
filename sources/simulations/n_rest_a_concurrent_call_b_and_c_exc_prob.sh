@@ -1,16 +1,19 @@
 #!/bin/bash
-# Scenario: il servizio A chiama in parallelo il servizio B e C. Uno dei due servizi, o entrambi, falliscono con una certa probabilità.
+# Scenario:
+# vengono effettuate N chiamate REST consecutive al servizio A il quale chiama in parallelo i servizi B e C.
+# Uno dei due servizi, o entrambi, falliscono con una certa probabilità.
 # Le chiamate a B e C vengono svolte in parallelo, non conta l'ordine con cui vengono specificate.
 
-echo "Eseguo chiamate in modo sincrono."
+echo "Eseguo $N chiamate REST consecutive al servizio A il quale chiama in parallelo i servizi B e C.
+Uno dei due servizi, o entrambi, falliscono con una certa probabilità."
 
-NUM=10  # Numero di chiamate da effettuare
+N=10  # Numero di chiamate da effettuare
 PROB_FAILURE_B=20   # Probabilità di fallimento per B [0-100]
 PROB_FAILURE_C=20   # Probabilità di fallimento per C [0-100]
 
 count=0    # Numero di chiamate fallite
 
-for (( i=0; i<$NUM; i++ ))
+for (( i=0; i<$N; i++ ))
 do
   fail=0
   echo "Chiamata $(($i+1))"

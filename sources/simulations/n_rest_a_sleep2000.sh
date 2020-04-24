@@ -1,8 +1,10 @@
 #!/bin/bash
-# Vengono effettuate N chiamate REST consecutive al servizio A il quale ritarda almeno 2000 ms
+# Scenario:
+# vengono effettuate N chiamate REST consecutive al servizio A il quale esegue uno sleep di 2 sec.
 
-N=50
-echo "Eseguo $N chiamate REST consecutive al servizio A il quale ritarda almeno 2000 ms"
+N=50 # Numero di chiamate da effettuare
+
+echo "Eseguo $N chiamate REST consecutive al servizio A il quale esegue uno sleep di 2 sec"
 
 for (( i=0; i<$N; i++ ))
 do
