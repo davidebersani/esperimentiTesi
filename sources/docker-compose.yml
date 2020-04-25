@@ -101,7 +101,14 @@ services:
       - "8080:8080"
     depends_on:
       - "eureka"
+      - "kafka"
+      - "fluentd"
       - "zipkin"
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: gateway.allLog
 
   zipkin:
     image: openzipkin/zipkin

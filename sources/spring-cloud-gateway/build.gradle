@@ -22,6 +22,19 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
 
+
+	//aggiunte per implementare la logica di templateService dentro al gateway
+	//implementation 'org.springframework.cloud:spring-cloud-starter' //non supportata dentro springcloudgateway
+	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'io.micrometer:micrometer-registry-prometheus'
+	implementation 'org.springframework.kafka:spring-kafka'
+	compileOnly "org.springframework.boot:spring-boot-starter-aop"
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
 }
 
 dependencyManagement {
