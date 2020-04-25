@@ -24,6 +24,21 @@ public class OperationsStringParser {
         //tutto minuscolo
         operations = operations.toLowerCase();
 
+        log.debug("prima: " + operations);
+
+        //aggiunta solo nel gateway preso da curl-client.sh
+        //Correggo la stringa se necessario. Ai caratteri {,},[,],; viene aggiunto uno spazio prima e dopo. Successivamente vengono tolti quelli in eccesso.
+        operations = operations
+                .replaceAll("\\{", " { ")
+                .replaceAll("}", " } ")
+                .replaceAll("\\[", " [ ")
+                .replaceAll("]", " ] ")
+                .replaceAll(";", " ; ")
+                .replaceAll("\"", " \" ")
+                .replaceAll(" +", " ");
+
+        log.debug("dopo: " + operations);
+
         StringTokenizer st = new StringTokenizer(operations," ");
         log.debug("num token generati: " + st.countTokens());
 
