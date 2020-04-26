@@ -4,6 +4,7 @@ import esperimenti.templateservice.domain.ConcurrentExecutionException;
 import esperimenti.templateservice.domain.GeneratedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -20,7 +21,7 @@ public class ConcurrentOperationManager {
     private TemplateService templateService;
 
     @Autowired
-    private ExecutorService executor;
+    private ApplicationContext context;
 
     private List<Runnable> taskList;
 
@@ -59,6 +60,8 @@ public class ConcurrentOperationManager {
         // Copio la lista dei thread da eseguire e pulisco la lista principale
         List<Runnable> toExecute = taskList;
         taskList=new LinkedList<>();
+
+        ExecutorService executor = context.getBean(ExecutorService.class);
 
         List<Future> taskResults = new LinkedList<>();
         // Aggiungo i task
