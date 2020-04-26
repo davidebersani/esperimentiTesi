@@ -1,6 +1,9 @@
 # application.yml 
---- 
-spring: 
+---
+
+#logging.level.com.example.springcloudgateway: DEBUG
+
+spring:
   application: 
     name: gateway
   cloud:
@@ -9,6 +12,12 @@ spring:
         locator:
           enabled: true
           lowerCaseServiceId: true
+  kafka:
+    bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
   sleuth:
     sampler:
       probability: 100
@@ -16,7 +25,9 @@ spring:
     baseUrl: http://zipkin:9411/
     
 eureka: 
-  client: 
+  client:
+    healthcheck:
+      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
     serviceUrl: 
       #defaultZone: http://localhost:8761/eureka/
       defaultZone: http://eureka:8761/eureka/
@@ -37,3 +48,14 @@ server:
 #    enabled: true
 #  eureka:
 #    enabled: true
+
+# HEALTH ENDPOINT
+# Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: always    # Espone dettagli sul health endpoint

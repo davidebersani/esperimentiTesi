@@ -1,8 +1,9 @@
 #!/bin/bash
-# Vengono effettuate N chiamate REST consecutive al servizio A il quale chiama il servizio B il quale chiama il servizio C.
-# Randomicamente uno dei 3 fallisce sempre
+# Scenario:
+# vengono effettuate N chiamate REST consecutive al servizio A il quale chiama il servizio B il quale chiama il servizio C.
+# Randomicamente uno dei 3 fallisce sempre.
 
-N=50
+N=50 # Numero di chiamate da effettuare
 EXCEPTION="exception \"eccezione generata\";"
 
 echo "Eseguo $N chiamate REST consecutive al servizio A il quale chiama il servizio B il quale chiama il servizio C. Randomicamente uno dei 3 fallisce sempre"
