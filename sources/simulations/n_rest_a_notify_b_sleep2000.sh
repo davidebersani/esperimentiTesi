@@ -9,7 +9,7 @@ echo "Eseguo $N chiamate REST consecutive al servizio A il quale invia un messag
 for (( i=0; i<$N; i++ ))
 do
   echo "Chiamata $(($i+1))"
-  ./curl-client.sh http://localhost:8080/a/prosegui "notify b { sleep 2000; };"
+  ./curl-client.sh http://localhost:8080/prosegui "call A { notify B { sleep 2000; }; };"
 done
 
 echo "Fatto."
