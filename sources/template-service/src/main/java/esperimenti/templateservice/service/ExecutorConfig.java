@@ -2,7 +2,7 @@ package esperimenti.templateservice.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.context.annotation.Scope;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 public class ExecutorConfig {
 
     @Bean
-    @RequestScope
+    @Scope("prototype")
     public ExecutorService getExecutor() {
         return Executors.newCachedThreadPool();
     }
