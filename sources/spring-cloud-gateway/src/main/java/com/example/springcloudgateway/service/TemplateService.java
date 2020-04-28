@@ -33,12 +33,15 @@ public class TemplateService {
         templateServicePort.makeRESTcallToService(serviceToCall, payload);
     }
 
+    @Timed(value="template.service.operations", extraTags = {"operation" , "safecall"})
+    public void safecallService(String serviceToCall, String payload) {
+        templateServicePort.makeSafeRESTcallToService(serviceToCall, payload);
+    }
 
     @Timed(value="template.service.operations", extraTags = {"operation" , "notify"})
     public void notifyService(String serviceToNotify, String payload) {
         publisher.notify(serviceToNotify, payload);
     }
-
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "sleep"})
     public void sleep(long sleepTime) {
@@ -48,7 +51,6 @@ public class TemplateService {
             log.info("sono stato interrotto mentre dormivo" + e.toString()); //TODO: non so bene come funziona
         }
     }
-
 
     @Timed(value="template.service.operations",extraTags = {"operation" , "exception"})
     public void generateException(String exceptionMessage) throws GeneratedException {
@@ -81,6 +83,13 @@ public class TemplateService {
                                     "vuole chiamare e dal payload da inviargli");
 
                         concurrentOperationManager.addCallTask(op.get(1), op.get(2));
+                        break;
+                    case "safecall":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione safecall deve essere seguita dal nome del servizio che si " +
+                                    "vuole chiamare e dal payload da inviargli");
+
+                        concurrentOperationManager.addSafecallTask(op.get(1), op.get(2));
                         break;
                     case "notify":
                         if(!(op.size() == 3))

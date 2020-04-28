@@ -56,7 +56,7 @@ public class OperationsStringParser {
 
             }catch(ClassNotFoundException e) {
                 throw new MalformedStringOfOperationsException("Azione non corretta. Non è stato possibile trovare alcuna azione corrispondente a "
-                        + token + ". Sono ammessi solo concurrent, call, notify, exception, sleep");
+                        + token + ". Sono ammessi solo concurrent, call, safecall, notify, exception, sleep");
             }catch(BeansException e) {
                 throw new Exception("Errore nella creazione dell'azione " + token);
             }

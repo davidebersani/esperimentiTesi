@@ -34,6 +34,11 @@ public class ConcurrentOperationManager {
         this.taskList.add(r);
     }
 
+    public void addSafecallTask(String service, String payload) {
+        Runnable r = () -> templateService.safecallService(service,payload);
+        this.taskList.add(r);
+    }
+
     public void addExceptionTask(String message) {
         Runnable r = () -> {
             try {
