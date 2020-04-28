@@ -65,6 +65,15 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
 
     }
 
+    @Override
+    public void makeSafeRESTcallToService(String serviceToCall, String payload) {
+        try {
+            this.makeRESTcallToService(serviceToCall, payload);
+        }catch (ResponseStatusException e) {
+            log.debug("Essendo una safecall non propago l'eccezione http: " + e.toString());
+        }
+    }
+
     private String getMessageOfHttpErrorException(HttpStatusCodeException e) {
 
         ObjectMapper mapper = new ObjectMapper();

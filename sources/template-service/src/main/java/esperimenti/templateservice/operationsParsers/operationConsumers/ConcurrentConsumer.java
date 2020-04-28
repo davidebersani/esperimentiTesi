@@ -46,6 +46,7 @@ public class ConcurrentConsumer implements OperationConsumer {
 
             switch (operationType) {
                 case "call":
+                case "safecall":
                 case "notify":
                     // servizio target
                     operation.add(stConcurrentOperations.nextToken());
@@ -67,7 +68,7 @@ public class ConcurrentConsumer implements OperationConsumer {
                     break;
                 default:
                     throw new MalformedStringOfOperationsException("token inaspettato: " + operationType + ". In una sequenza di operazioni " +
-                            "concorrenti sono ammessi solo: call, notify, exception, sleep");
+                            "concorrenti sono ammessi solo: call, safecall, notify, exception, sleep");
             }
 
             log.debug("operation: " + operation.toString());
