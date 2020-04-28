@@ -17,6 +17,6 @@ SLEEP_C=1000    # Millisecondi di sleep per il servizio C
 for (( i=0; i<$N; i++ ))
 do
   echo "Chiamata $(($i+1))"
-  ./curl-client.sh http://localhost:8080/a/prosegui "concurrent[call b {sleep $SLEEP_B;}; call c {sleep $SLEEP_C;};];"
+  ./curl-client.sh http://localhost:8080/prosegui "call a { concurrent[call b {sleep $SLEEP_B;}; call c {sleep $SLEEP_C;};]; };"
 done
 echo "Fatto."
