@@ -86,7 +86,7 @@ public class ConcurrentOperationManager {
                 f.get();
             } catch (ExecutionException e) {
                 Exception exception = (Exception) e.getCause();
-                log.debug("Si è verificata un'eccezione nell'esecuzione di un thread." + exception);
+                log.debug("Si è verificata un'eccezione nell'esecuzione di un thread." + exception.getCause());
                 exceptionsList.add(e);
             }
         }
@@ -96,7 +96,7 @@ public class ConcurrentOperationManager {
             StringBuilder allExceptions = new StringBuilder();
 
             exceptionsList.forEach(exc-> {
-                allExceptions.append(exc.toString());
+                allExceptions.append(exc.getCause().toString());
                 allExceptions.append(" ---- ");
             });
 
