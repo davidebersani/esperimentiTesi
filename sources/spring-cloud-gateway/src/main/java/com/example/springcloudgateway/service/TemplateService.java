@@ -67,7 +67,7 @@ public class TemplateService {
     @Timed(value="template.service.operations",extraTags = {"operation" , "concurrent"})
     public void executeConcurrentOperations(ArrayList<ArrayList<String>> listOfConcurrentOperations) throws MalformedStringOfOperationsException, InterruptedException, ConcurrentExecutionException {
 
-        List<Runnable> runnableList = new ArrayList<>();
+        //List<Runnable> runnableList = new ArrayList<>();
 
         for(ArrayList<String> op: listOfConcurrentOperations){
 
