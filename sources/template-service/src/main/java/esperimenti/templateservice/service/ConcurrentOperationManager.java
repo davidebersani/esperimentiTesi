@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -45,7 +46,7 @@ public class ConcurrentOperationManager {
                 templateService.generateException(message);
             } catch (GeneratedException e) {
                 log.info("GeneratedException catturata in lambda");
-                throw new RuntimeException("GeneratedException catturata in lambda: GeneratedException: " + e.getMessage(), e); //TODO: provvisiorio (come riportarla?)
+                throw new RuntimeException("GeneratedException catturata: " + e.getMessage(), e);
             }
         };
         this.taskList.add(r);
@@ -68,6 +69,8 @@ public class ConcurrentOperationManager {
 
         ExecutorService executor = context.getBean(ExecutorService.class);
 
+        List<ExecutionException> exceptionsList = new ArrayList<>();
+
         List<Future> taskResults = new LinkedList<>();
         // Aggiungo i task
         for(Runnable task : toExecute) {
@@ -83,8 +86,21 @@ public class ConcurrentOperationManager {
                 f.get();
             } catch (ExecutionException e) {
                 Exception exception = (Exception) e.getCause();
-                throw new ConcurrentExecutionException("Si è verificata un'eccezione nell'esecuzione di un thread.", exception);
+                log.debug("Si è verificata un'eccezione nell'esecuzione di un thread." + exception.getCause());
+                exceptionsList.add(e);
             }
+        }
+
+        if(!exceptionsList.isEmpty()){
+
+            StringBuilder allExceptions = new StringBuilder();
+
+            exceptionsList.forEach(exc-> {
+                allExceptions.append(exc.getCause().toString());
+                allExceptions.append(" ---- ");
+            });
+
+            throw new ConcurrentExecutionException("Si sono verificate le seguenti eccezioni nell'esecuzione dei thread paralleli: " + allExceptions.toString() );
         }
 
     }
