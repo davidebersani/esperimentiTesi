@@ -4,9 +4,9 @@
 # Si vede dal tracing che B non processa il secondo messaggio finchè non ha finito di processare il primo.
 
 echo "Invio primo messaggio"
-./curl-client.sh http://localhost:8080/a/prosegui "notify b {sleep 5000;};"
+./curl-client.sh http://localhost:8080/prosegui "call A { notify B {sleep 5000;}; };"
 
 echo "Invio secondo messaggio"
-./curl-client.sh http://localhost:8080/a/prosegui "notify b {sleep 1000;};"
+./curl-client.sh http://localhost:8080/prosegui "call A { notify B {sleep 1000;}; };"
 
 echo "Fatto."

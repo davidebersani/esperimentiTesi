@@ -9,7 +9,7 @@ echo "Eseguo $N chiamate REST consecutive al servizio A il quale esegue uno slee
 for (( i=0; i<$N; i++ ))
 do
     echo "Chiamata $((i+1))"
-    ./curl-client.sh http://localhost:8080/a/prosegui "sleep 2000;"
+    ./curl-client.sh http://localhost:8080/prosegui "call A { sleep 2000; };"
     echo ""
 done
 

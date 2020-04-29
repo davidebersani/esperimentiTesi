@@ -12,9 +12,9 @@ NUM=50
 for (( i=0; i<$NUM; i++ ))
 do
   echo "Chiamata $i"
-  ./curl-client.sh http://localhost:8080/a/prosegui " " >/dev/null &
-  ./curl-client.sh http://localhost:8080/b/prosegui " " >/dev/null &
-  ./curl-client.sh http://localhost:8080/c/prosegui " " >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call A {};" >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call B {};" >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call C {};" >/dev/null &
 done
 
 echo "Aspetto 10 secondi per avviare il secondo blocco di chiamate con ritardo."
@@ -23,7 +23,7 @@ sleep 10
 for (( i=0; i<$NUM; i++ ))
 do
   echo "Chiamata $i"
-  ./curl-client.sh http://localhost:8080/a/prosegui "sleep 3000;" >/dev/null &
-  ./curl-client.sh http://localhost:8080/b/prosegui "sleep 3000;" >/dev/null &
-  ./curl-client.sh http://localhost:8080/c/prosegui "sleep 3000;" >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call A {sleep 3000;};" >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call B {sleep 3000;};" >/dev/null &
+  ./curl-client.sh http://localhost:8080/prosegui "call C {sleep 3000;};" >/dev/null &
 done

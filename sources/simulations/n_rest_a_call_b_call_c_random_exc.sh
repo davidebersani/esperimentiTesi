@@ -27,7 +27,7 @@ do
         PAYLOAD_C=$EXCEPTION
     fi
     echo "$PAYLOAD_A call B {$PAYLOAD_B call C {$PAYLOAD_C}; };"
-    ./curl-client.sh http://localhost:8080/a/prosegui "$PAYLOAD_A call B {$PAYLOAD_B call C {$PAYLOAD_C}; };"
+    ./curl-client.sh http://localhost:8080/prosegui "call A { $PAYLOAD_A call B {$PAYLOAD_B call C {$PAYLOAD_C}; }; };"
     echo ""
 done
 
