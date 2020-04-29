@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.*;
 
 @Service
 @Slf4j
@@ -28,13 +26,17 @@ public class TemplateService {
     private MessagePublisherPort publisher;
 
     @Autowired
-    private ExecutorService executor;
+    ConcurrentOperationManager concurrentOperationManager;
 
     @Timed(value="template.service.operations", description = "timer per call", extraTags = {"operation" , "call"})
     public void callService(String serviceToCall, String payload) {
         templateServicePort.makeRESTcallToService(serviceToCall, payload);
     }
 
+    @Timed(value="template.service.operations", extraTags = {"operation" , "safecall"})
+    public void safecallService(String serviceToCall, String payload) {
+        templateServicePort.makeSafeRESTcallToService(serviceToCall, payload);
+    }
 
     @Timed(value="template.service.operations", extraTags = {"operation" , "notify"})
     public void notifyService(String serviceToNotify, String payload) {
@@ -82,27 +84,28 @@ public class TemplateService {
                             throw new MalformedStringOfOperationsException("L'operazione call deve essere seguita dal nome del servizio che si " +
                                     "vuole chiamare e dal payload da inviargli");
 
-                        runnableList.add(() -> callService(op.get(1), op.get(2)));
+                        concurrentOperationManager.addCallTask(op.get(1), op.get(2));
+                        break;
+                    case "safecall":
+                        if(!(op.size() == 3))
+                            throw new MalformedStringOfOperationsException("L'operazione safecall deve essere seguita dal nome del servizio che si " +
+                                    "vuole chiamare e dal payload da inviargli");
+
+                        concurrentOperationManager.addSafecallTask(op.get(1), op.get(2));
                         break;
                     case "notify":
                         if(!(op.size() == 3))
                             throw new MalformedStringOfOperationsException("L'operazione notify deve essere seguita dal nome del servizio a cui si " +
                                     "vuole inviare il messaggio e dal messaggio stesso");
 
-                        runnableList.add(() -> notifyService(op.get(1), op.get(2)));
+                        concurrentOperationManager.addNotifyTask(op.get(1), op.get(2));
                         break;
                     case "exception":
                         if(!(op.size() == 2))
                             throw new MalformedStringOfOperationsException("L'operazione exception deve essere seguita dal messaggio dell'eccezione");
 
-                        runnableList.add(() -> {
-                            try {
-                                generateException(op.get(1));
-                            } catch (GeneratedException e) {
-                                log.info("GeneratedException catturata in lambda");
-                                throw new RuntimeException("GeneratedException catturata in lambda", e); //TODO: provvisiorio (come riportarla?)
-                            }
-                        });
+                        concurrentOperationManager.addExceptionTask(op.get(1));
+
                         break;
                     case "sleep":
                         if(!(op.size() == 2))
@@ -115,30 +118,14 @@ public class TemplateService {
                         }catch(NumberFormatException e){
                             throw new MalformedStringOfOperationsException("dopo il token 'sleep' è richiesto valore un intero che indichi la durata");
                         }
-
-                        runnableList.add(() -> sleep(sleepTime));
+                        concurrentOperationManager.addSleepTask(sleepTime);
                 }
             }
         }
 
         log.info("eseguo operazioni concorrenti");
-        List<Future> taskResults = new LinkedList<>();
-        // Aggiungo i task
-        for(Runnable task : runnableList) {
-            taskResults.add(executor.submit(task));
-        }
+        concurrentOperationManager.executeTasksAndCheckTheResult();
 
-        // Executor non accetta più task
-        executor.shutdown();
-        // Controllo che l'esecuzione di tutti i thread sia andata a buon fine
-        for(Future f : taskResults) {
-            try {
-                f.get();
-            } catch (ExecutionException e) {
-                Exception exception = (Exception) e.getCause();
-                throw new ConcurrentExecutionException("Si è verificata un'eccezione nell'esecuzione di un thread.", exception);
-            }
-        }
         //runnableList.parallelStream().forEach(Thread::start);
         log.info("ho eseguito le operazioni concorrenti");
 

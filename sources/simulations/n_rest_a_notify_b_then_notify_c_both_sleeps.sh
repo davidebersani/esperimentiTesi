@@ -14,7 +14,7 @@ Entrambi i servizi chiamati fanno uno sleep ma con diversa durata"
 for (( i=0; i<$N; i++ ))
 do
   echo "Chiamata $(($i+1))"
-  ./curl-client.sh http://localhost:8080/a/prosegui "notify b {sleep $SLEEP_B;}; notify c {sleep $SLEEP_C;};"
+  ./curl-client.sh http://localhost:8080/prosegui "call A { notify B {sleep $SLEEP_B;}; notify C {sleep $SLEEP_C;}; };"
 done
 
 echo "Fatto."

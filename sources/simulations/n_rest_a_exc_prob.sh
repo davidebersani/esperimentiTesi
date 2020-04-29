@@ -38,7 +38,7 @@ do
     else
         PAYLOAD=" "
     fi
-    ./curl-client.sh http://localhost:8080/a/prosegui "$PAYLOAD"
+    ./curl-client.sh http://localhost:8080/prosegui "call A { $PAYLOAD };"
     echo ""
 done
 

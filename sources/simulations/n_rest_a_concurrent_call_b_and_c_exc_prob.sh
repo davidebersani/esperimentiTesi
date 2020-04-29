@@ -7,7 +7,7 @@
 echo "Eseguo $N chiamate REST consecutive al servizio A il quale chiama in parallelo i servizi B e C.
 Uno dei due servizi, o entrambi, falliscono con una certa probabilità."
 
-N=10  # Numero di chiamate da effettuare
+N=50  # Numero di chiamate da effettuare
 PROB_FAILURE_B=20   # Probabilità di fallimento per B [0-100]
 PROB_FAILURE_C=20   # Probabilità di fallimento per C [0-100]
 
@@ -19,26 +19,26 @@ do
   echo "Chiamata $(($i+1))"
   rand=$((RANDOM%100+1))
   #echo "$RAND"
-  if (( rand > PROB_FAILURE_B ))
+  if (( rand < PROB_FAILURE_B ))
   then
-    # Non inserisco eccezione
+    # Inserisco eccezione
     echo
     payload_b="exception \"Fallimento!\";"
     echo "B fallisce."
     fail=1
   else
-    # Inserisco eccezione
+    # Non inserisco eccezione
     payload_b=" "
   fi
   rand=$((RANDOM%100+1))
-  if (( rand > PROB_FAILURE_C ))
+  if (( rand < PROB_FAILURE_C ))
   then
-    # Non inserisco eccezione
+    # Inserisco eccezione
     payload_c="exception \"Fallimento!\";"
     echo "C fallisce."
     fail=1
   else
-    # Inserisco eccezione
+    # Non inserisco eccezione
     payload_c=" "
   fi
 
@@ -47,7 +47,7 @@ do
     ((count=count+1))
   fi
 
-  ./curl-client.sh http://localhost:8080/a/prosegui "concurrent[call b {$payload_b}; call c {$payload_c};];"
+  ./curl-client.sh http://localhost:8080/prosegui "call A { concurrent[call B {$payload_b}; call C {$payload_c};]; };"
 done
 
 echo "Fatto. Sono fallite $count chiamate."

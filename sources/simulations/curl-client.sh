@@ -5,7 +5,8 @@ then
   echo "Utilizzo: ./curl-client.sh <indirizzo> \"<stringa parametro>\""
 else
   # Correggo la stringa se necessario. Ai caratteri {,},[,],; viene aggiunto uno spazio prima e dopo. Successivamente vengono tolti quelli in eccesso.
-  param=`echo "$2" | sed -e "s/{/ { /g" | sed -e "s/}/ } /g" | sed -e "s/\[/ \[ /g" | sed -e "s/]/ ] /g" | sed -e "s/;/ ; /g"| sed -e "s/\"/ \" /g"| sed -e "s/ \+/ /g"`
+  #param=`echo "$2" | sed -e "s/{/ { /g" | sed -e "s/}/ } /g" | sed -e "s/\[/ \[ /g" | sed -e "s/]/ ] /g" | sed -e "s/;/ ; /g"| sed -e "s/\"/ \" /g"| sed -e "s/ \+/ /g"`
   #echo "$param"
-  curl -X POST -H "Content-Type: text/plain" --data "$param" $1
+  #curl -X POST -H "Content-Type: text/plain" --data "$param" $1
+  curl -X POST -H "Content-Type: text/plain" --data "$2" $1
 fi
