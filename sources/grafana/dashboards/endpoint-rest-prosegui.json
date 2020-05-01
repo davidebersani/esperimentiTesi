@@ -64,7 +64,7 @@
         {
           "expr": "sum by (uri, job) (rate(http_server_requests_seconds_count{uri=\"/prosegui\"}[10s]))",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ job }}",
           "refId": "A"
         }
       ],
@@ -321,5 +321,5 @@
   "variables": {
     "list": []
   },
-  "version": 1
+  "version": 2
 }
