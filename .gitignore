@@ -29,7 +29,8 @@ hs_err_pid*
 
 ### Vagrant ###
 # General
-environment/.vagrant/
+environment/workstation/.vagrant/
+environment/kube-cluster/.vagrant/
 
 # Log files (if you are creating logs in debug mode, uncomment this)
 # *.log
