@@ -136,7 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-kubernetes-kubeadm.sh"
                 node.vm.provision :shell, :inline => SCRIPTS + "start-kube-cluster-master.sh"
                 node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-calico-network-addon.sh " + POD_NETWORK_CIDR
-                # node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-nginx-ingress-addon.sh"
+                node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-nginx-ingress-addon.sh"
             elsif opts[:type] == "worker"
 				node.vm.provision :shell, :inline => SCRIPTS + "configure-kube-cluster-hosts.sh"
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-kubernetes-kubeadm.sh"
