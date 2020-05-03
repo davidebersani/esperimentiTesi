@@ -36,3 +36,8 @@ kubectl apply -f common/global-configuration.yaml
 
 # Avvio ingress control
 kubectl apply -f daemon-set/nginx-ingress.yaml
+
+# Per disinstallare
+# kubectl delete namespace nginx-ingress
+# kubectl delete clusterrole nginx-ingress
+# kubectl delete clusterrolebinding nginx-ingress
