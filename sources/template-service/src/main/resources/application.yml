@@ -7,7 +7,7 @@ spring:
   application: 
     name: template
   kafka:
-    bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    bootstrap-servers: kafka-svc:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -27,23 +27,24 @@ spring:
   zipkin:
     baseUrl: http://zipkin:9411/
 
-eureka:
-  client:
-    healthcheck:
-      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
-    serviceUrl:
-#     defaultZone: http://localhost:8761/eureka/ check this url
-      defaultZone: http://eureka:8761/eureka/
-# leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
-# just here to provide quicker updates to Eureka for demos
-  instance: 
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap: 
-      instanceId: ${spring.application.name}:${random.value}
+#eureka:
+#  client:
+#    healthcheck:
+#      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
+#    serviceUrl:
+##     defaultZone: http://localhost:8761/eureka/ check this url
+#      defaultZone: http://eureka:8761/eureka/
+## leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
+## just here to provide quicker updates to Eureka for demos
+#  instance:
+#    leaseRenewalIntervalInSeconds: 10
+#    metadataMap:
+#      instanceId: ${spring.application.name}:${random.value}
 
 # Porta casuale
 server: 
-  port: ${PORT:${SERVER_PORT:0}}
+  #port: ${PORT:${SERVER_PORT:0}}
+  port: 8080
 
 # Kafka
 template:
