@@ -14,6 +14,8 @@ kubectl apply -f kafka-deploy-modified.yml
 rm kafka-deploy-modified.yml
 
 # Avvio servizi
-kubectl apply -f template-services.yml
+kubectl apply -f a-service.yml
+kubectl apply -f b-service.yml
+kubectl apply -f c-service.yml
 
 

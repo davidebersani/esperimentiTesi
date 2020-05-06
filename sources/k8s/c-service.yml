@@ -1,0 +1,54 @@
+# Servizio C: deployment, service e ingress.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: c
+  template:
+    metadata:
+      name: c-pod
+      labels:
+        app: c
+    spec:
+      containers:
+      - name: c-container
+        image: bersanid/template:0.1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: spring.application.name
+          value: c
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: c-svc
+  namespace: template-ns
+spec:
+  type: NodePort
+  selector:
+    app: c
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30003
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: c-ing
+  namespace: template-ns
+spec:
+  rules:
+  - host: c
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: c-svc
+          servicePort: 8080  
