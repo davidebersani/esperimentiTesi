@@ -7,10 +7,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "bento/ubuntu-18.04"
     
     # Condivido la directory dei sorgenti con la vm guest
-    config.vm.synced_folder "../sources/", "/home/vagrant/sources", :mount_options => ["dmode=777", "fmode=777"]
+    config.vm.synced_folder "../../sources/", "/home/vagrant/sources", :mount_options => ["dmode=777", "fmode=777"]
     
     # Condivido la directory con script utili per il Provisioning
-    config.vm.synced_folder "../provisioning/", "/home/vagrant/provisioning", :mount_options => ["dmode=777", "fmode=777"]
+    config.vm.synced_folder "../../provisioning/", "/home/vagrant/provisioning", :mount_options => ["dmode=777", "fmode=777"]
 
     # Configurazione del nodo:
     # - Java SDK 8

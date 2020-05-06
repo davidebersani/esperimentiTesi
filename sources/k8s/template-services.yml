@@ -1,0 +1,54 @@
+# Servizio A: deployment, service e ingress.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: a
+  template:
+    metadata:
+      name: a-pod
+      labels:
+        app: a
+    spec:
+      containers:
+      - name: a-container
+        image: bersanid/template:0.1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: spring.application.name
+          value: a
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: a-svc
+  namespace: template-ns
+spec:
+  type: NodePort
+  selector:
+    app: a
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30001
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: a-ing
+  namespace: template-ns
+spec:
+  rules:
+  - host: a
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: a-svc
+          servicePort: 8080  

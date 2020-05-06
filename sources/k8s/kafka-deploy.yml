@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-deploy
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafka
+  template:
+    metadata:
+      name: kafka-pod
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka-container
+        image: wurstmeister/kafka
+        ports:
+        - containerPort: 9092
+        env:
+        - name: KAFKA_ADVERTISED_HOST_NAME
+          value: <IPFromService>  # Da aggiornare in base all'IP assegnato al service di kafka
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: zookeeper-svc:2181
+        - name: KAFKA_CREATE_TOPICS
+          value: a:1:1,b:1:1,c:1:1
