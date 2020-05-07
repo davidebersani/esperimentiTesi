@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: a-ing
+  namespace: template-ns
+spec:
+  rules:
+    - host: a
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: a-svc
+              servicePort: 8080

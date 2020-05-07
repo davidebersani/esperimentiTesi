@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: c
+  template:
+    metadata:
+      name: c-pod
+      labels:
+        app: c
+    spec:
+      containers:
+        - name: c-container
+          image: esperimentesi/template
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.application.name
+              value: c-svc

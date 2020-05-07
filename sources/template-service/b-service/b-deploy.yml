@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: b-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: b
+  template:
+    metadata:
+      name: b-pod
+      labels:
+        app: b
+    spec:
+      containers:
+        - name: b-container
+          image: esperimentesi/template
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.application.name
+              value: b-svc

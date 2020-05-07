@@ -8,8 +8,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
-@EnableHystrix
+//@EnableFeignClients
+//@EnableHystrix
 public class TemplateServiceApplication {
 
 	public static void main(String[] args) {

@@ -4,8 +4,8 @@
 #logging.level.esperimenti.templateservice: DEBUG
 
 spring: 
-  application: 
-    name: template
+  #application:
+  #  name: template
   kafka:
     bootstrap-servers: kafka-svc:9092
     producer:

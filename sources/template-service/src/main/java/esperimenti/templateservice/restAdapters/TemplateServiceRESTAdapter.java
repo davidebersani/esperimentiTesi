@@ -5,6 +5,7 @@ import esperimenti.templateservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,14 +18,18 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @Configuration
 @Slf4j
 public class TemplateServiceRESTAdapter implements TemplateServicePort {
 
+    //@Autowired
+    //private LoadBalancerClient loadBalancer;
+
     @Autowired
-    private LoadBalancerClient loadBalancer;
+    private DiscoveryClient discoveryClient;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,7 +42,11 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
     @Override
     public void makeRESTcallToService(String serviceToCall, String payload) {
 
-        ServiceInstance instance = loadBalancer.choose(serviceToCall);
+        //ServiceInstance instance = loadBalancer.choose(serviceToCall);
+        log.info(Arrays.toString(discoveryClient.getServices().toArray()));
+
+
+        ServiceInstance instance = discoveryClient.getInstances(serviceToCall).get(0);
 
         if(instance==null)
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
