@@ -15,10 +15,10 @@ spec:
         app: a
     spec:
       containers:
-      - name: a-container
-        image: bersanid/template:0.1
-        ports:
-        - containerPort: 8080
-        env:
-        - name: spring.application.name
-          value: a
+        - name: a-container
+          image: esperimentesi/template
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.application.name
+              value: a-svc
