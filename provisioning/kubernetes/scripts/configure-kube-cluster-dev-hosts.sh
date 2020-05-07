@@ -26,9 +26,9 @@ function createModifiedEtcHosts
 #
 function configureKubeClusterClientEtcHosts {
 	echo "adding entries for kubernetes dev client node to /etc/hosts"
-	echo "10.11.1.71 kube-1 kube-cluster hello sentence alpha beta gamma" >> ${HOSTS_FILE}
-	echo "10.11.1.72 kube-2 kube-cluster hello sentence alpha beta gamma" >> ${HOSTS_FILE}
-	echo "10.11.1.73 kube-3 kube-cluster hello sentence alpha beta gamma" >> ${HOSTS_FILE}
+	echo "10.11.1.71 kube-1 kube-cluster a b c app" >> ${HOSTS_FILE}
+	echo "10.11.1.72 kube-2 kube-cluster a b c app" >> ${HOSTS_FILE}
+	echo "10.11.1.73 kube-3 kube-cluster a b c app" >> ${HOSTS_FILE}
 }
 
 # aggiunge a /etc/hosts le seguenti entry 
