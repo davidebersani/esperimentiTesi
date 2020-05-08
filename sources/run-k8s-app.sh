@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Avvio namespace
-kubectl apply -f template-ns.yml 
+kubectl apply -f template-ns.yml
 
 # Avvio kafka
 kubectl apply -f zookeeper/
@@ -15,3 +15,5 @@ rm kafka/kafka-deploy-modified.yml
 
 # Avvio servizi
 kubectl apply -f template-service/a-service/
+kubectl apply -f template-service/b-service/
+kubectl apply -f template-service/c-service/
