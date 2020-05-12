@@ -13,7 +13,7 @@ spring:
           enabled: true
           lowerCaseServiceId: true
   kafka:
-    bootstrap-servers: ${DOCKER_HOST_IP:10.11.1.111}:9092
+    bootstrap-servers: kafka-svc:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -22,21 +22,21 @@ spring:
     sampler:
       probability: 100
   zipkin:
-    baseUrl: http://zipkin:9411/
+    baseUrl: http://zipkin-svc:9411/
     
-eureka: 
-  client:
-    healthcheck:
-      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
-    serviceUrl: 
-      #defaultZone: http://localhost:8761/eureka/
-      defaultZone: http://eureka:8761/eureka/
-# leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
-# just here to provide quicker updates to Eureka for demos
-  instance:
-    leaseRenewalIntervalInSeconds: 10
-    metadataMap:
-      instanceId: ${spring.application.name}:${random.value}
+#eureka:
+#  client:
+#    healthcheck:
+#      enabled: true   # Determina lo status dell'applicazione e aggiorna eureka quando manda l'heartbeat
+#    serviceUrl:
+#      #defaultZone: http://localhost:8761/eureka/
+#      defaultZone: http://eureka:8761/eureka/
+## leave eureka.instance.leaseRenewalIntervalInSeconds unchanged in production
+## just here to provide quicker updates to Eureka for demos
+#  instance:
+#    leaseRenewalIntervalInSeconds: 10
+#    metadataMap:
+#      instanceId: ${spring.application.name}:${random.value}
 
 server:
   port: 8080

@@ -22,9 +22,8 @@ import java.io.IOException;
 @Configuration
 @Slf4j
 public class TemplateServiceRESTAdapter implements TemplateServicePort {
-
-    @Autowired
-    private LoadBalancerClient loadBalancer;
+//    @Autowired
+//    private LoadBalancerClient loadBalancer;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -37,14 +36,20 @@ public class TemplateServiceRESTAdapter implements TemplateServicePort {
     @Override
     public void makeRESTcallToService(String serviceToCall, String payload) {
 
-        ServiceInstance instance = loadBalancer.choose(serviceToCall);
+//        ServiceInstance instance = loadBalancer.choose(serviceToCall);
+//        log.info(Arrays.toString(discoveryClient.getServices().toArray()));
 
-        if(instance==null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
+
+//        ServiceInstance instance = discoveryClient.getInstances(serviceToCall).get(0);
+
+//        if(instance==null)
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "istanza del servizio " + serviceToCall + " non trovata");
 
         StringBuilder sb = new StringBuilder();
-        sb.append(instance.getUri().toString());
-        sb.append("/prosegui");
+//        sb.append(instance.getUri().toString());
+        sb.append("http://");
+        sb.append(serviceToCall);
+        sb.append(":8080/prosegui");
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);

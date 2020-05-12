@@ -4,10 +4,10 @@ metadata:
   name: a-svc
   namespace: template-ns
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: a
   ports:
     - port: 8080
       targetPort: 8080
-      nodePort: 30001
+#      nodePort: 30001
