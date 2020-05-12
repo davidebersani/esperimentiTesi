@@ -22,3 +22,13 @@ spec:
           env:
             - name: spring.application.name
               value: a-svc
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 250
+            periodSeconds: 5
