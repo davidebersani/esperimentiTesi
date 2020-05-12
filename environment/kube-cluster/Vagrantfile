@@ -138,6 +138,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-calico-network-addon.sh " + POD_NETWORK_CIDR
                 # node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-nginx-ingress-addon.sh"
                 node.vm.provision :shell, :inline => SCRIPTS + "setup-kube-cluster-nginx-ingress-community-addon.sh"
+
+                # Apro porte per accedere ai servizi dalla macchina host
+                node.vm.network "forwarded_port", guest: 30001, host: 9411, id: 'zipkin', auto_correct: true
             elsif opts[:type] == "worker"
 				node.vm.provision :shell, :inline => SCRIPTS + "configure-kube-cluster-hosts.sh"
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-kubernetes-kubeadm.sh"

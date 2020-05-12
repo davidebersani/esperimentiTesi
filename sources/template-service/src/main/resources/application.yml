@@ -25,7 +25,7 @@ spring:
     sampler:
       probability: 100
   zipkin:
-    baseUrl: http://zipkin:9411/
+    baseUrl: http://zipkin-svc:9411/
 
 #eureka:
 #  client:

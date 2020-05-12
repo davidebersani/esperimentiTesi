@@ -13,6 +13,9 @@ sed "s/<IPFromService>/$ip/g" kafka/kafka-deploy.yml > kafka/kafka-deploy-modifi
 kubectl apply -f kafka/kafka-deploy-modified.yml
 rm kafka/kafka-deploy-modified.yml
 
+# Avvio zipkin
+kubectl apply -f zipkin/
+
 # Avvio servizi
 kubectl apply -f template-service/a-service/
 kubectl apply -f template-service/b-service/
