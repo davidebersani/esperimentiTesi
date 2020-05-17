@@ -31,7 +31,7 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 	implementation 'org.springframework.cloud:spring-cloud-starter-zipkin'
 
-	implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes'
+	//implementation 'org.springframework.cloud:spring-cloud-starter-kubernetes'
 
 	compileOnly "org.springframework.boot:spring-boot-starter-aop"
 	compileOnly 'org.projectlombok:lombok'

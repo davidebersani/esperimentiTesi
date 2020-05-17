@@ -167,3 +167,7 @@ sources/eureka-server/.settings/
 sources/zuul-gateway/.gradle/
 sources/zuul-gateway/.settings/
 sources/eureka-server/.springBeans
+
+sources/k8s/prove/
+
+sources/prova-pod.yml
