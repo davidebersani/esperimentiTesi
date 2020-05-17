@@ -3,6 +3,13 @@
 # Avvio namespace
 kubectl apply -f template-ns.yml
 
+# Prometheus
+kubectl create -f role.yml
+kubectl apply -f prometheus-server/
+#kubectl apply -f prometheus-server/config-map.yml
+#kubectl apply -f prometheus-server/prometheus-deploy.yml
+#kubectl apply -f prometheus-server/prometheus-svc.yml
+
 # Avvio kafka
 kubectl apply -f zookeeper/
 kubectl apply -f kafka/kafka-svc.yml
@@ -21,3 +28,9 @@ kubectl apply -f template-service/a-service/
 kubectl apply -f template-service/b-service/
 kubectl apply -f template-service/c-service/
 kubectl apply -f spring-cloud-gateway/
+
+# Riepilogo
+echo ""
+echo "==> Sono stati creati i seguenti pods"
+echo ""
+kubectl get pods -n template-ns

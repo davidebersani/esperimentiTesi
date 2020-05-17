@@ -13,6 +13,10 @@ spec:
       name: c-pod
       labels:
         app: c
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
     spec:
       containers:
         - name: c-container
