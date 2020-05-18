@@ -9,8 +9,8 @@ data:
   prometheus.yml: |-
     # my global config
     global:
-      scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-      evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+      scrape_interval:     5s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+      evaluation_interval: 5s # Evaluate rules every 15 seconds. The default is every 1 minute.
       # scrape_timeout is set to the global default (10s).
 
     # Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
@@ -21,14 +21,17 @@ data:
     scrape_configs:
       - job_name: 'kubernetes-apiservers'
 
+        # Specifica la configurazion per kubernetes service discovery:
         kubernetes_sd_configs:
-        - role: endpoints
+        - role: endpoints   # Role: come scoprire i target
         scheme: https
 
+        # TLS Connection
         tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt   # Certificato per validare l'API server
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token    # Token da inserire negli header di ciascun scrape
 
+        # Rinomina alcune label
         relabel_configs:
         - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
           action: keep

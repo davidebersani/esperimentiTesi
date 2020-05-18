@@ -142,6 +142,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # Apro porte per accedere ai servizi dalla macchina host
                 node.vm.network "forwarded_port", guest: 30001, host: 9411, id: 'zipkin', auto_correct: true
                 node.vm.network "forwarded_port", guest: 30002, host: 9090, id: 'promehteus', auto_correct: true
+                node.vm.network "forwarded_port", guest: 30003, host: 3000, id: 'grafana', auto_correct: true
             elsif opts[:type] == "worker"
 				node.vm.provision :shell, :inline => SCRIPTS + "configure-kube-cluster-hosts.sh"
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-kubernetes-kubeadm.sh"

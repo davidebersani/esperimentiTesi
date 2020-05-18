@@ -1,16 +1,26 @@
 #!/bin/bash
 
 # Avvio namespace
+echo "==> Creo il namespace"
 kubectl apply -f template-ns.yml
 
 # Prometheus
+echo ""
+echo "==> Rilascio Prometheus"
 kubectl create -f role.yml
 kubectl apply -f prometheus-server/
 #kubectl apply -f prometheus-server/config-map.yml
 #kubectl apply -f prometheus-server/prometheus-deploy.yml
 #kubectl apply -f prometheus-server/prometheus-svc.yml
 
+# Grafana
+echo ""
+echo "==> Rilascio grafana"
+kubectl apply -f grafana/
+
 # Avvio kafka
+echo ""
+echo "==> Rilascio Kafka"
 kubectl apply -f zookeeper/
 kubectl apply -f kafka/kafka-svc.yml
 # echo "==> N.B. Avviare manualmente kafka-deploy.yml"    # Trovare un modo per farlo automaticamente.
@@ -21,9 +31,13 @@ kubectl apply -f kafka/kafka-deploy-modified.yml
 rm kafka/kafka-deploy-modified.yml
 
 # Avvio zipkin
+echo ""
+echo "==> Rilascio Zipkin"
 kubectl apply -f zipkin/
 
 # Avvio servizi
+echo ""
+echo "==> Rilascio i servizi A, B e C e il Gateway"
 kubectl apply -f template-service/a-service/
 kubectl apply -f template-service/b-service/
 kubectl apply -f template-service/c-service/

@@ -16,7 +16,7 @@
 
 set -o errexit
 
-readonly URL=${URL:-"http://localhost:3000"}
+readonly URL=${URL:-"http://kube-cluster:30003"}
 readonly LOGIN=${LOGIN:-"admin:admin"}
 readonly DASHBOARDS_DIRECTORY=${DASHBOARDS_DIRECTORY:-"./grafana/dashboards"}
 
