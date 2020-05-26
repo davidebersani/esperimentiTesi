@@ -31,17 +31,19 @@ kubectl apply -f kafka/kafka-deploy-modified.yml
 rm kafka/kafka-deploy-modified.yml
 
 # Avvio zipkin
-echo ""
-echo "==> Rilascio Zipkin"
-kubectl apply -f zipkin/
+#echo ""
+#echo "==> Rilascio Zipkin"
+#kubectl apply -f zipkin/
 
 # Avvio servizi
 echo ""
-echo "==> Rilascio i servizi A, B e C e il Gateway"
-kubectl apply -f template-service/a-service/
-kubectl apply -f template-service/b-service/
-kubectl apply -f template-service/c-service/
-kubectl apply -f spring-cloud-gateway/
+#echo "==> Rilascio i servizi A, B e C e il Gateway"
+echo "==> Rilascio il servizio stub"
+kubectl apply -f template-service/stub-service/
+#kubectl apply -f template-service/a-service/
+#kubectl apply -f template-service/b-service/
+#kubectl apply -f template-service/c-service/
+#kubectl apply -f spring-cloud-gateway/
 
 # Riepilogo
 echo ""

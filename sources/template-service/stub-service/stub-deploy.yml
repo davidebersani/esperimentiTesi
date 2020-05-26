@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stub-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stub
+  template:
+    metadata:
+      name: stub-pod
+      labels:
+        app: stub
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: stub-container
+          image: esperimentesi/template
+          ports:
+            - containerPort: 8080
+          env:
+            - name: spring.application.name
+              value: stub-svc
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 250
+            periodSeconds: 5

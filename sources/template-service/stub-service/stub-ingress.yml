@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: stub-ing
+  namespace: template-ns
+spec:
+  rules:
+    - host: app
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: stub-svc
+              servicePort: 8080
