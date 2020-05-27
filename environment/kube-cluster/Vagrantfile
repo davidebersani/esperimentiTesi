@@ -119,7 +119,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 # node.vm.provision :shell, :inline => SCRIPTS + "setup-docker-client-dev.sh"
 				# 2) installare e usare docker su dev 
 				node.vm.provision :shell, :inline => SCRIPTS + "prepare-docker.sh"
-				node.vm.provision :shell, :inline => SCRIPTS + "setup-docker.sh"
+                node.vm.provision :shell, :inline => SCRIPTS + "setup-docker.sh"
 				# comunque serve anche docker-compose 
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-docker-compose.sh"
             else # opts[:type] == "master" || opts[:type] == "worker"
@@ -143,6 +143,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                 node.vm.network "forwarded_port", guest: 30001, host: 9411, id: 'zipkin', auto_correct: true
                 node.vm.network "forwarded_port", guest: 30002, host: 9090, id: 'promehteus', auto_correct: true
                 node.vm.network "forwarded_port", guest: 30003, host: 3000, id: 'grafana', auto_correct: true
+                node.vm.network "forwarded_port", guest: 30004, host: 9999, id: 'influxdb', auto_correct: true
             elsif opts[:type] == "worker"
 				node.vm.provision :shell, :inline => SCRIPTS + "configure-kube-cluster-hosts.sh"
 				node.vm.provision :shell, :inline => SCRIPTS + "setup-kubernetes-kubeadm.sh"

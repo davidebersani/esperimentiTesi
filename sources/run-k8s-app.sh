@@ -9,9 +9,6 @@ echo ""
 echo "==> Rilascio Prometheus"
 kubectl create -f role.yml
 kubectl apply -f prometheus-server/
-#kubectl apply -f prometheus-server/config-map.yml
-#kubectl apply -f prometheus-server/prometheus-deploy.yml
-#kubectl apply -f prometheus-server/prometheus-svc.yml
 
 # Grafana
 echo ""
