@@ -4,6 +4,12 @@
 echo "==> Creo il namespace"
 kubectl apply -f template-ns.yml
 
+# Influxdb
+echo ""
+echo "==> Rilascio Influxdb"
+kubectl apply -f influx-helm/persistent-volume.yml
+helm upgrade --install my-release -f influx-helm/values.yml influxdata/influxdb --namespace template-ns
+
 # Prometheus
 echo ""
 echo "==> Rilascio Prometheus"

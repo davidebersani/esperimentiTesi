@@ -14,3 +14,12 @@ data:
          type: 'prometheus'                    # type of the data source
          url: 'http://prometheus-svc:9090'         # url of the prom instance
          version: 1
+      -  name: InfluxDB
+         type: influxdb
+         access: proxy
+         database: demo
+         user: user
+         password: user
+         url: http://my-release-influxdb.template-ns:8086
+         jsonData:
+         httpMode: GET
