@@ -48,6 +48,11 @@ kubectl apply -f template-service/stub-service/
 #kubectl apply -f template-service/c-service/
 #kubectl apply -f spring-cloud-gateway/
 
+echo ""
+#echo "==> Rilascio i servizi A, B e C e il Gateway"
+echo "==> Rilascio il servizio Analytics2"
+kubectl apply -f analytics2/
+
 # Riepilogo
 echo ""
 echo "==> Sono stati creati i seguenti pods"

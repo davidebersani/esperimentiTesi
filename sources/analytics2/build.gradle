@@ -1,0 +1,41 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
+
+group = 'esperimenti.tesi'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:Greenwich.SR1"
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//	compile "com.influxdb:influxdb-client-flux:1.8.0"
+	compile "com.influxdb:influxdb-client-java:1.8.0"
+//	compile 'org.influxdata:influxdb-spring'
+	compile 'com.squareup.okhttp3:okhttp:3.13.1'
+	compile 'com.squareup.okhttp3:logging-interceptor:3.13.1'
+	compileOnly 'org.projectlombok:lombok'
+
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+test {
+	useJUnitPlatform()
+}

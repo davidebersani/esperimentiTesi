@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics2-deployment
+  namespace: template-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: analytics2
+  template:
+    metadata:
+      name: analytics2-pod
+      labels:
+        app: analytics2
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+        - name: analytics2-container
+          image: esperimentesi/analytics2
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 250
+            periodSeconds: 5
