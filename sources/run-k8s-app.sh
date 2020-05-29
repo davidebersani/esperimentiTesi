@@ -6,9 +6,11 @@ kubectl apply -f template-ns.yml
 
 # Influxdb
 echo ""
-echo "==> Rilascio Influxdb"
+echo "==> Rilascio Influxdb e Chronograf"
 kubectl apply -f influx-helm/persistent-volume.yml
 helm upgrade --install my-release -f influx-helm/values.yml influxdata/influxdb --namespace template-ns
+helm upgrade --install chronograf influxdata/chronograf --namespace template-ns
+kubectl apply -f chronograf-helm/chronograf-svc.yml
 
 # Prometheus
 echo ""
