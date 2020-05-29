@@ -5,6 +5,7 @@ import esperimenti.tesi.analytics2.domain.model.ViewStats;
 import esperimenti.tesi.analytics2.domain.service.DbService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.influx.InfluxDbAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,8 +14,6 @@ public class StatsAplication {
 
     @Autowired
     DbService dbService;
-
-    @Autowired
 
 
     public ViewStats getViewStats() throws BadResultDimensionsException {

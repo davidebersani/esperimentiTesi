@@ -2,10 +2,10 @@
 # Script per buildare un servizio passato come parametro
 if [ "$1" = "help" -o "$#" -ne 2 ]
 then
-  echo "Utilizzo: ./build-publich-rollout.sh <directory> <nome immagine Docker>."
+  echo "Utilizzo: ./build-publich-rollout.sh <directory> <nome immagine Docker, sarà il suffisso di esperimentesi/>."
 else
   cd "$1"
-  echo "==> Avvio build del servizio template"
+  echo "==> Avvio build del servizio in $1"
   gradle build && \
 
   echo "==> Avvio build dell'immagine Docker" && \

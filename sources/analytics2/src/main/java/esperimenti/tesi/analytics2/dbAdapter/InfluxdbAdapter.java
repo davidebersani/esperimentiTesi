@@ -8,7 +8,7 @@ import esperimenti.tesi.analytics2.domain.service.DbService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;  
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class InfluxdbAdapter implements DbService {
     @Autowired
     private InfluxDBClient influxDBClient;
 
-    @Value("${analytics.influxdb.db}")
+    @Value("${spring.influxdb2.bucket}")
     private String dbName;
 
     @Override
@@ -33,12 +33,13 @@ public class InfluxdbAdapter implements DbService {
                 "|> drop(columns:[\"kubernetes_pod_name\"]) " +
                 "|> sum()";
 
-
         QueryApi queryApi = influxDBClient.getQueryApi();
 
         List<FluxTable> tables = queryApi.query(query);
         // Mi aspetto un solo record
-        if(tables.size() != 1 || tables.get(0).getRecords().size() != 1)
+        if(tables.size()==0)
+            return 0;
+        else if(tables.size() != 1 || tables.get(0).getRecords().size() != 1)
             throw new BadResultDimensionsException();
 
         log.debug(tables.get(0).getRecords().get(0).getValue().toString());

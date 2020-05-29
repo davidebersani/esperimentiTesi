@@ -1,7 +1,7 @@
 spring:
   application:
     name: analytics2
-  infuxdb2:
+  influxdb2:
     url: http://my-release-influxdb:8086/
     org: org
     bucket: demo
@@ -28,8 +28,3 @@ management:
   endpoint:
     health:
       show-details: always    # Espone dettagli sul health endpoint
-
-analytics:
-  influxdb:
-    db: demo
-    host: http://my-release-influxdb:8086/
