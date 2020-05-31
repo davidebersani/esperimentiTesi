@@ -7,4 +7,4 @@
 
 kubectl get pv | tail -n+2 | awk '{print $1}' | xargs -I{} kubectl patch pv {} --type='merge' -p '{"metadata":{"finalizers": null}}'
 kubectl delete -f template-ns.yml
-kubectl delete pv data2
+kubectl delete pv data3
