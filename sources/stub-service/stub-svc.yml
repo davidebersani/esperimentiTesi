@@ -4,10 +4,10 @@ metadata:
   name: stub-svc
   namespace: template-ns
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: stub
   ports:
     - port: 8080
       targetPort: 8080
-#      nodePort: 30001
+      nodePort: 30007

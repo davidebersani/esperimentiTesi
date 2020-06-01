@@ -1,25 +1,17 @@
-spring:
+# application.yml 
+---
+
+#logging.level.esperimenti.templateservice: DEBUG
+
+spring: 
   application:
-    name: analytics2
-  influxdb2:
-    url: http://my-release-influxdb:8086/
-    org: org
-    bucket: demo
-    token: token
-    username: user
+    name: stub
 
-analytics2:
-  default-time-interval: 30m
-
-logging:
-  level:
-    esperimenti:
-      tesi:
-        analytics2: DEBUG
-
-server:
+# Porta casuale
+server: 
   #port: ${PORT:${SERVER_PORT:0}}
   port: 8080
+
 
 # HEALTH ENDPOINT
 # Use "*" to expose all endpoints, or a comma-separated list to expose selected ones
@@ -27,7 +19,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        include: health,info,prometheus
   endpoint:
     health:
       show-details: always    # Espone dettagli sul health endpoint

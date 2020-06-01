@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: stub-container
-          image: esperimentesi/template
+          image: esperimentesi/stub
           ports:
             - containerPort: 8080
           env:

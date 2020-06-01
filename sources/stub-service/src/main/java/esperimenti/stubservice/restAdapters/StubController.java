@@ -13,9 +13,13 @@ public class StubController {
     MeterRegistry meterRegistry;
 
     @GetMapping("/view")
-    public String view(@RequestParam Integer projectId, @RequestParam String utente) {
+    public String view(@RequestParam Integer projectId, @RequestParam String user) {
         //TODO: Si potrebbe introdurre un'annotazione
-        meterRegistry.counter("views", "projectId", projectId.toString(), "user", utente).increment();
-        return "L'utente " + utente + " ha visitato il progetto " + projectId + "!";
+        //TODO: Prendere username da header http
+
+        // Estraggo bearer token da header http
+
+//        meterRegistry.counter("views", "projectId", projectId.toString(), "user", user).increment();
+        return "L'utente " + user + " ha visitato il progetto " + projectId + "!";
     }
 }
