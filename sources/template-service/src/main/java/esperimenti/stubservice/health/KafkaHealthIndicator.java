@@ -1,4 +1,4 @@
-package esperimenti.templateservice.health;
+package esperimenti.stubservice.health;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;

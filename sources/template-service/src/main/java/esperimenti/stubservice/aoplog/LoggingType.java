@@ -1,4 +1,4 @@
-package esperimenti.templateservice.aoplog;
+package esperimenti.stubservice.aoplog;
 
 public enum LoggingType {
     REQUEST,

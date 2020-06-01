@@ -1,4 +1,4 @@
-package esperimenti.templateservice.domain;
+package esperimenti.stubservice.domain;
 
 public class GeneratedException extends Exception {
 

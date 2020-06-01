@@ -1,7 +1,7 @@
-package esperimenti.templateservice.restAdapters;
+package esperimenti.stubservice.restAdapters;
 
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.operationsParsers.OperationsStringParser;
+import esperimenti.stubservice.domain.MalformedStringOfOperationsException;
+import esperimenti.stubservice.operationsParsers.OperationsStringParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

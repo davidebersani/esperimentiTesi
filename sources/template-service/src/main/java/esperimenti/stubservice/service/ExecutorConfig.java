@@ -1,4 +1,4 @@
-package esperimenti.templateservice.service;
+package esperimenti.stubservice.service;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

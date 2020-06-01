@@ -1,4 +1,4 @@
-package esperimenti.templateservice.service;
+package esperimenti.stubservice.service;
 
 public interface TemplateServicePort {
 

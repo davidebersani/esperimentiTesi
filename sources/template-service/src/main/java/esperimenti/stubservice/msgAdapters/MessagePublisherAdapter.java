@@ -1,6 +1,6 @@
-package esperimenti.templateservice.msgAdapters;
+package esperimenti.stubservice.msgAdapters;
 
-import esperimenti.templateservice.service.MessagePublisherPort;
+import esperimenti.stubservice.service.MessagePublisherPort;
 import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

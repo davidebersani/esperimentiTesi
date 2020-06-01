@@ -1,8 +1,9 @@
-package esperimenti.templateservice.restAdapters;
+package esperimenti.stubservice.restAdapters;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,14 +13,17 @@ public class StubController {
     @Autowired
     MeterRegistry meterRegistry;
 
+    @Autowired
+    IAMService iamService;
+
     @GetMapping("/view")
-    public String view(@RequestParam Integer projectId, @RequestParam String user) {
+    public String view(@RequestParam Integer projectId, @RequestHeader(name="Authorization") String token) {
         //TODO: Si potrebbe introdurre un'annotazione
-        //TODO: Prendere username da header http
 
         // Estraggo bearer token da header http
+        String username = iamService.getUsername(token);
 
-//        meterRegistry.counter("views", "projectId", projectId.toString(), "user", user).increment();
-        return "L'utente " + user + " ha visitato il progetto " + projectId + "!";
+        meterRegistry.counter("views", "projectId", projectId.toString(), "user", username).increment();
+        return "L'utente " + username + " ha visitato il progetto " + projectId + "!";
     }
 }

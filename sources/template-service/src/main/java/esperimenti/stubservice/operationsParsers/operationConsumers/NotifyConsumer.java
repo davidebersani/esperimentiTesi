@@ -1,8 +1,8 @@
-package esperimenti.templateservice.operationsParsers.operationConsumers;
+package esperimenti.stubservice.operationsParsers.operationConsumers;
 
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.operationsParsers.OperationsStringParser;
-import esperimenti.templateservice.service.TemplateService;
+import esperimenti.stubservice.domain.MalformedStringOfOperationsException;
+import esperimenti.stubservice.operationsParsers.OperationsStringParser;
+import esperimenti.stubservice.service.TemplateService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

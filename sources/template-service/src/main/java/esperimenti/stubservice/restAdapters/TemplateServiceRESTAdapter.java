@@ -1,12 +1,10 @@
-package esperimenti.templateservice.restAdapters;
+package esperimenti.stubservice.restAdapters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import esperimenti.templateservice.service.TemplateServicePort;
+import esperimenti.stubservice.service.TemplateServicePort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.*;
@@ -18,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
-import java.util.Arrays;
 
 @Component
 @Configuration

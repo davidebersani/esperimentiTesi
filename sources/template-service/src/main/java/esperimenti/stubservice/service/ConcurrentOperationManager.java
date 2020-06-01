@@ -1,7 +1,7 @@
-package esperimenti.templateservice.service;
+package esperimenti.stubservice.service;
 
-import esperimenti.templateservice.domain.ConcurrentExecutionException;
-import esperimenti.templateservice.domain.GeneratedException;
+import esperimenti.stubservice.domain.ConcurrentExecutionException;
+import esperimenti.stubservice.domain.GeneratedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

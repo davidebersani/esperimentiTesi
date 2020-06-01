@@ -1,4 +1,4 @@
-package esperimenti.templateservice.aoplog;
+package esperimenti.stubservice.aoplog;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;

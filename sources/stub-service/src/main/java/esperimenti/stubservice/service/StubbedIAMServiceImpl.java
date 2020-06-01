@@ -1,10 +1,12 @@
 package esperimenti.stubservice.service;
 
 import esperimenti.stubservice.restAdapters.IAMService;
+import org.springframework.stereotype.Service;
 
-public class IAMServiceImpl implements IAMService {
+@Service
+public class StubbedIAMServiceImpl implements IAMService {
     @Override
     public String getUsername(String token) {
-        return "davide";
+        return "dav.bersani@prova.com";
     }
 }

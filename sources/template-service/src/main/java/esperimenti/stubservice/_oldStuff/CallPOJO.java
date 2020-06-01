@@ -1,4 +1,4 @@
-package esperimenti.templateservice._oldStuff;
+package esperimenti.stubservice._oldStuff;
 
 import java.util.List;
 

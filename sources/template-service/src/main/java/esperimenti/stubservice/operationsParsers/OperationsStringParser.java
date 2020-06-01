@@ -1,8 +1,8 @@
-package esperimenti.templateservice.operationsParsers;
+package esperimenti.stubservice.operationsParsers;
 
-import esperimenti.templateservice.domain.GeneratedException;
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
-import esperimenti.templateservice.operationsParsers.operationConsumers.OperationConsumer;
+import esperimenti.stubservice.domain.GeneratedException;
+import esperimenti.stubservice.domain.MalformedStringOfOperationsException;
+import esperimenti.stubservice.operationsParsers.operationConsumers.OperationConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

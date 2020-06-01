@@ -1,4 +1,4 @@
-package esperimenti.templateservice.restAdapters;
+package esperimenti.stubservice.restAdapters;
 
 public class CustomHttpErrorException {
 

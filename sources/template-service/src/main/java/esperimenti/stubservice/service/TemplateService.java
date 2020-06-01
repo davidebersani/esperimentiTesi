@@ -1,8 +1,8 @@
-package esperimenti.templateservice.service;
+package esperimenti.stubservice.service;
 
-import esperimenti.templateservice.domain.ConcurrentExecutionException;
-import esperimenti.templateservice.domain.GeneratedException;
-import esperimenti.templateservice.domain.MalformedStringOfOperationsException;
+import esperimenti.stubservice.domain.ConcurrentExecutionException;
+import esperimenti.stubservice.domain.GeneratedException;
+import esperimenti.stubservice.domain.MalformedStringOfOperationsException;
 import io.micrometer.core.annotation.Timed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Slf4j
