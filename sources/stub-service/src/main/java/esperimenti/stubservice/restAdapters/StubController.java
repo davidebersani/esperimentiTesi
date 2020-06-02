@@ -1,5 +1,6 @@
 package esperimenti.stubservice.restAdapters;
 
+import esperimenti.stubservice.metrics.annotation.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +19,10 @@ public class StubController {
 
     @GetMapping("/view")
     public String view(@RequestParam Integer projectId, @RequestHeader(name="Authorization") String token) {
-        //TODO: Si potrebbe introdurre un'annotazione
+        //TODO: Si potrebbe introdurre un'annotazione?
+        //TODO: Si potebbe implementare con AOP in modo da separare la logica delle metriche dal resto del codice.
 
-        // Estraggo bearer token da header http
+        // Ottengo username da token
         String username = iamService.getUsername(token);
 
         meterRegistry.counter("views", "projectId", projectId.toString(), "user", username).increment();

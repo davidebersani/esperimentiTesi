@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 public class StubbedIAMServiceImpl implements IAMService {
     @Override
     public String getUsername(String token) {
-        return "dav.bersani@prova.com";
+        return token;
     }
 }
