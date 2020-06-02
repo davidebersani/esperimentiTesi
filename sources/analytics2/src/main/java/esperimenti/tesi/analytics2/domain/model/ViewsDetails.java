@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ViewOfProject {
+public class ViewsDetails {
     @Column(name="user")
     private String user;
     @Column(name="_value")

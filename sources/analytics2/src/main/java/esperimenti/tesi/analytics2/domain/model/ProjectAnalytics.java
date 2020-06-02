@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class StatsOfProject {
-    private List<ViewOfProject> views;
+public class ProjectAnalytics {
+    private List<ViewsDetails> views;
     private Integer total;
 }
