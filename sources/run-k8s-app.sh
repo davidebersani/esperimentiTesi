@@ -12,11 +12,16 @@ helm upgrade --install my-release -f influx-helm/values.yml influxdata/influxdb 
 #helm upgrade --install chronograf influxdata/chronograf --namespace template-ns
 #kubectl apply -f chronograf-helm/chronograf-svc.yml
 
-# Prometheus
+# E' possibile usare Telegraf o Prometheus per raccogliere le metriche.
 echo ""
-echo "==> Rilascio Prometheus"
-kubectl create -f role.yml
-kubectl apply -f prometheus-server/
+echo "==> Rilascio Telegraf"
+helm upgrade --install my-telegraf influxdata/telegraf --namespace template-ns -f telegraf-helm/values.yml
+
+# Prometheus
+#echo ""
+#echo "==> Rilascio Prometheus"
+#kubectl create -f role.yml
+#kubectl apply -f prometheus-server/
 
 ## Grafana
 #echo ""
