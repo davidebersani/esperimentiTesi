@@ -1,4 +1,4 @@
-package esperimenti.tesi.analytics2.persistance;
+package esperimenti.tesi.analytics2.config;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;

@@ -1,9 +1,9 @@
-package esperimenti.tesi.analytics2.dbAdapter;
+package esperimenti.tesi.analytics2.persistance;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.QueryApi;
-import esperimenti.tesi.analytics2.domain.model.ViewOfProject;
-import esperimenti.tesi.analytics2.domain.service.DbService;
+import esperimenti.tesi.analytics2.domain.model.ViewsDetails;
+import esperimenti.tesi.analytics2.domain.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class InfluxdbAdapter implements DbService {
+public class ProjectRepositoryInfluxdbAdapter implements ProjectRepository {
 
     @Autowired
     private InfluxDBClient influxDBClient;
@@ -21,21 +21,24 @@ public class InfluxdbAdapter implements DbService {
     @Value("${spring.influxdb2.bucket}")
     private String dbName;
 
-    @Value("${analytics2.default-time-interval")
+    @Value("${analytics2.default-time-interval}")
     private String defaultTimeInterval;
 
     @Override
-    public List<ViewOfProject> getViewOfProject(Integer id) {
+    public List<ViewsDetails> getProjectAnalytics(Integer id) {
+        // TODO: verificare query
         String query =
                 "from(bucket:\"" + dbName + "\") " +
-                "|> range(start: -" + defaultTimeInterval + ") " +
+                "|> range(start: -" + defaultTimeInterval +" ) " +
                 "|> filter(fn:(r) => r._measurement== \"views_total\" and r.app==\"stub\" and r.projectId==\"" + id + "\") " +
                 "|> last() " +
                 "|> group(columns:[\"user\"]) " +
                 "|> sum()";
 
+        log.debug("Query eseguita: "  + query);
+
         QueryApi queryApi = influxDBClient.getQueryApi();
 
-        return queryApi.query(query, ViewOfProject.class);
+        return queryApi.query(query, ViewsDetails.class);
     }
 }
