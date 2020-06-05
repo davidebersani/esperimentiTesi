@@ -18,6 +18,6 @@ public class SellerController {
 
     @GetMapping("/stat")
     public ResponseEntity<ProjectAnalytics> getViewStat(@RequestParam Integer projectId) {
-        return ResponseEntity.ok(statsAplication.getAnalyticsOfProject(projectId));
+        return ResponseEntity.ok(statsAplication.getProjectAnalytics(projectId));
     }
 }

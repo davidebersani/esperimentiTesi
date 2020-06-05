@@ -8,6 +8,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Builder
 public class ProjectAnalytics {
     private List<ViewsDetails> views;
